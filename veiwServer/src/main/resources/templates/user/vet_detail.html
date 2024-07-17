@@ -176,7 +176,7 @@
 	 		      document.querySelector("#toggleReviews").style.display = "none";
 	 		    }
 		    }
-		  xhttp.open("GET", "http://localhost:9001/api/v1/user/vet-detail?id=" + id, true);
+		  xhttp.open("GET", "/api/v1/user/vet-detail?id=" + id, true);
 		  xhttp.setRequestHeader("MemberId", localStorage.getItem("MemberId"));
 		  xhttp.setRequestHeader("Authorization", localStorage.getItem("token"));
 		  xhttp.setRequestHeader("role", localStorage.getItem("role"));

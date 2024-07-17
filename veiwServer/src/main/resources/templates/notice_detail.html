@@ -52,7 +52,7 @@ $(document).ready(function(){
     console.log("id 값:" + id);
 
     $.ajax({
-        url: "http://localhost:9001/notice/" + id,
+        url: "/notice/" + id,
         method: "GET",
         success: function(notice){
             $('#title').text(notice.title);
@@ -73,7 +73,7 @@ $(document).ready(function(){
 $('#deleteBtn').on('click', function() {
 	if (confirm("정말로 삭제하시겠습니까?")) {
 		const xhttp = new XMLHttpRequest();
-	    xhttp.open("DELETE", "http://localhost:9001/notice/"+id, true);
+	    xhttp.open("DELETE", "/notice/"+id, true);
 	    xhttp.onload = function() {
 	        if (xhttp.status === 200) {
 	            console.log("공지 삭제 성공!");

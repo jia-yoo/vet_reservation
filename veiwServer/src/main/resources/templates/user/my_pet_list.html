@@ -41,7 +41,7 @@ $(document).ready(function() {
 
 	console.log("memId 출력 : " + MemberId);
     $.ajax({
-        url: 'http://localhost:9001/user/mypage/myPet',
+        url: '/user/mypage/myPet',
         type: 'GET',
         dataType: 'json',
         headers: {
@@ -88,7 +88,7 @@ function edit(id) {
 function deletePet(id) {
         
     $.ajax({
-        url: 'http://localhost:9001/user/mypage/myPet/'+id,
+        url: '/user/mypage/myPet/'+id,
         type: 'DELETE',
         headers: {
             'Authorization': token,

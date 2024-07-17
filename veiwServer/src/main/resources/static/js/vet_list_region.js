@@ -123,10 +123,10 @@ searchBtn.addEventListener("click", function() {
     	params.append(key, Array.from(guMap.get(key)));
     })
     
-    const url = "http://localhost:9001/api/v1/vet-list?" + params.toString();
+    const url = "/api/v1/vet-list?" + params.toString();
     xhttp.open("GET", url, true);
     xhttp.setRequestHeader("MemberId", localStorage.getItem("MemberId"));
-    xhttp.setRequestHeader("token", localStorage.getItem("token"));
+    xhttp.setRequestHeader("Authorization", localStorage.getItem("token"));
     xhttp.setRequestHeader("role", localStorage.getItem("role"));
     xhttp.send();
 });
@@ -362,7 +362,7 @@ document.querySelector("#keywordSearchBtn").addEventListener("click", function()
 	       		searchResult.push(hos)
 	       		});
     };
-    xhttp.open("GET", "http://localhost:9001/api/v1/keyword-vet-list?"+ params.toString(), true); 
+    xhttp.open("GET", "/api/v1/keyword-vet-list?"+ params.toString(), true); 
     xhttp.setRequestHeader("MemberId", localStorage.getItem("MemberId"));
     xhttp.setRequestHeader("token", localStorage.getItem("token"));
     xhttp.setRequestHeader("role", localStorage.getItem("role"));

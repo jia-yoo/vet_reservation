@@ -114,7 +114,7 @@ function updateText() {
 }
 
 function loadData() {
-  fetch(`http://localhost:9001/api/petgame/${userId}`)
+  fetch(`/api/petgame/${userId}`)
     .then(response => response.json())
     .then(data => {
       feedTickets = data.feedCount
@@ -148,7 +148,7 @@ function saveData() {
     isFullyGrown: isFullyGrown
   }
 
-  fetch(`http://localhost:9001/api/petgame/${userId}`, {
+  fetch(`/api/petgame/${userId}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json;charset=utf-8'

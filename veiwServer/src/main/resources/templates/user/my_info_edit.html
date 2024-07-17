@@ -111,7 +111,7 @@
 			frm.name.value=result.name;
 			frm.nickname.value = result.nickname;
 		}
-		xhttp.open("get", "http://localhost:9001/api/v1/user/userInfo/"+localStorage.getItem("MemberId"));
+		xhttp.open("get", "/api/v1/user/userInfo/"+localStorage.getItem("MemberId"));
 		//xhttp.setRequestHeader("Content-type", "application/json");
 		var token = localStorage.getItem('token');
 		if (token) {
@@ -152,7 +152,7 @@
 			alert(this.responseText);
 			//document.getElementById("result").innerHTML = result;
 		}
-		xhttp.open("put", "http://localhost:9001/api/v1/user/userInfo");
+		xhttp.open("put", "/api/v1/user/userInfo");
 		xhttp.setRequestHeader("Content-type", "application/json");
 		var token = localStorage.getItem('token');
 		if (token) {
@@ -231,7 +231,7 @@
 			document.getElementById("nicknameResult").innerHTML = result;
 		}
 		const memberId=localStorage.getItem('MemberId');
-		xhttp.open("post", "http://localhost:9001/api/v1/common/check/nickname/"+memberId);
+		xhttp.open("post", "/api/v1/common/check/nickname/"+memberId);
 		xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");	
 
 		xhttp.send("nickname=" + nickname.value);

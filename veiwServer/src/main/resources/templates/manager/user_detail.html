@@ -91,7 +91,7 @@
 <script>
 const token = localStorage.getItem("token");
 const memberId = document.querySelector("#memberId").value;
-fetch("http://localhost:9001/api/v1/manager/user/" + memberId, {
+fetch("/api/v1/manager/user/" + memberId, {
 	method : "GET",
 	headers: {
         'Authorization': `${token}`
@@ -113,7 +113,7 @@ fetch("http://localhost:9001/api/v1/manager/user/" + memberId, {
 .catch(error => console.log(error));
 
 
-fetch("http://localhost:9001/api/v1/manager/point/" + memberId,{
+fetch("/api/v1/manager/point/" + memberId,{
 	method : "GET",
 	headers: {
         'Authorization': `${token}`
@@ -146,7 +146,7 @@ fetch("http://localhost:9001/api/v1/manager/point/" + memberId,{
 })
 .catch(error => console.log(error));
 
-fetch("http://localhost:9001/api/v1/manager/point/total/" + memberId,{
+fetch("/api/v1/manager/point/total/" + memberId,{
 	method : "GET",
 	headers: {
         'Authorization': `${token}`
@@ -172,7 +172,7 @@ function addPoint(){
 	}
 	const sendData = JSON.stringify(addPointOj);
 	console.log(addPointOj);
-	fetch("http://localhost:9001/api/v1/manager/point",{
+	fetch("/api/v1/manager/point",{
 		method : "POST",
 		headers : {
 			"Content-type" : "application/json",

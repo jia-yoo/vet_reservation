@@ -208,7 +208,7 @@
         let lunchHours, lunchStart, lunchEnd, start, end;
 
         // 예약 불가능한 시간 데이터 가져오기
-        fetch("http://localhost:9001/api/v1/hospital/doctor/unavailable-time/" + doctorId, {
+        fetch("/api/v1/hospital/doctor/unavailable-time/" + doctorId, {
             method: "GET",
             headers: {
                 'Authorization': `${token}`
@@ -241,7 +241,7 @@
         .catch(error => console.log(error));
 
         // 예약된 시간 데이터 가져오기
-        fetch("http://localhost:9001/api/v1/hospital/reservation/doctor/" + doctorId, {
+        fetch("/api/v1/hospital/reservation/doctor/" + doctorId, {
             method: "GET",
             headers: {
                 'Authorization': `${token}`
@@ -283,7 +283,7 @@
         .catch(error => console.log(error));
 
         // 영업 시간 데이터 가져오기
-        fetch("http://localhost:9001/api/v1/hospital/business-hours", {
+        fetch("/api/v1/hospital/business-hours", {
             method: "GET",
             headers: {
                 'Authorization': `${token}`,
@@ -429,7 +429,7 @@
             // 객체를 json으로 변경하기
             const sendData = JSON.stringify(timeData);
             console.log(sendData);
-            fetch("http://localhost:9001/api/v1/hospital/doctor/unavailable-time", {
+            fetch("/api/v1/hospital/doctor/unavailable-time", {
                 method: "POST",
                 headers: {
                     'Authorization': `${token}`,
@@ -466,7 +466,7 @@
         // 객체를 json으로 변경하기
         const sendData = JSON.stringify(timeData);
         console.log(sendData);
-        fetch("http://localhost:9001/api/v1/hospital/doctor/unavailable-time", {
+        fetch("/api/v1/hospital/doctor/unavailable-time", {
             method: "POST",
             headers: {
                 'Authorization': `${token}`,

@@ -14,7 +14,7 @@
 const memberId = localStorage.getItem("MemberId");
 const token = localStorage.getItem("token");
         document.addEventListener('DOMContentLoaded', function() {
-            fetch("http://localhost:9001/api/v1/hospital/business-hours", {
+            fetch("/api/v1/hospital/business-hours", {
                 method: "GET",
                 headers: {
                     'Authorization': `${token}`,

@@ -51,7 +51,7 @@ $(document).ready(function() {
 
 	console.log("memId 출력 : " + MemberId);
     $.ajax({
-        url: 'http://localhost:9001/user/mypage/qna-list',
+        url: '/user/mypage/qna-list',
         type: 'GET',
         dataType: 'json',
         headers: {
@@ -113,7 +113,7 @@ function edit(id) {
 function deletePet(id) {
         
     $.ajax({
-        url: 'http://localhost:9001/user/mypage/myPet/'+id,
+        url: '/user/mypage/myPet/'+id,
         type: 'DELETE',
         headers: {
             'Authorization': token,

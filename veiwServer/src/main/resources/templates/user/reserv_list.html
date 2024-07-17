@@ -211,7 +211,7 @@ ready();
         
       
     }
-    xhttp.open("get", "http://localhost:9001/api/v1/user/reservationList/"+localStorage.getItem("MemberId"));
+    xhttp.open("get", "/api/v1/user/reservationList/"+localStorage.getItem("MemberId"));
     //xhttp.setRequestHeader("Content-type", "application/json");
     var token = localStorage.getItem('token');
     if (token) {
@@ -411,7 +411,7 @@ ready();
 			alert(result);
 			
 		}
-		xhttp.open("post", "http://localhost:9001/api/v1/user/review");
+		xhttp.open("post", "/api/v1/user/review");
 		//xhttp.setRequestHeader("Content-type", "multipart/form-data");	
 
 		xhttp.send(formData);

@@ -42,7 +42,7 @@ function getToken() {
 
 // FCM 토큰을 서버로 전송
 function sendTokenToServer(token) {
-    fetch('http://localhost:9001/api/v1/fcm/send', {
+    fetch('/api/v1/fcm/send', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

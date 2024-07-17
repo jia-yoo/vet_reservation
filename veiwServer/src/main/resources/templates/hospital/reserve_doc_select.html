@@ -24,7 +24,7 @@
 const memberId = localStorage.getItem("MemberId");
 const token = localStorage.getItem("token");
 console.log("memberId", memberId);
-fetch("http://localhost:9001/api/v1/hospital/doctor", {
+fetch("/api/v1/hospital/doctor", {
 	method : "GET",
 	headers: {
         'Authorization': token,

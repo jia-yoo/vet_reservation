@@ -30,7 +30,7 @@
 
         function loadPosts(page) {
             $.ajax({
-                url: 'http://localhost:9001/api/v1/manager/test2?page=' + page,
+                url: '/api/v1/manager/test2?page=' + page,
                 type: 'GET',
                 success: function(response) {
                     console.log(response);

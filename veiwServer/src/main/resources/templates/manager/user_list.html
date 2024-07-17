@@ -40,7 +40,7 @@
 <script>
 const token = localStorage.getItem("token");
 function allList(){
-	fetch("http://localhost:9001/api/v1/manager/user", {
+	fetch("/api/v1/manager/user", {
 		method : "GET",
 		headers: {
 	        'Authorization': `${token}`
@@ -80,7 +80,7 @@ allList();
 function blackListAdd(event, id){
 	alert("준비중입니다!");
 // 	if(confirm("해당 고객을 블랙리스트에 추가하시겠습니까?")){
-// 		fetch("http://localhost:9001/api/v1/manager/blackList/" + id,{
+// 		fetch("/api/v1/manager/blackList/" + id,{
 // 			method : "PUT"
 // 		})
 // 		.then(response => response.text())
@@ -106,7 +106,7 @@ document.querySelector("#searchBtn").addEventListener("click", function(){
 		allList();
 	}else{
 		console.log(keyword.value);
-		fetch("http://localhost:9001/api/v1/manager/user/keyword/" + keyword.value, {
+		fetch("/api/v1/manager/user/keyword/" + keyword.value, {
 			method : "GET",
 			headers: {
 		        'Authorization': `${token}`

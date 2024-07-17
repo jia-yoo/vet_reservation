@@ -49,7 +49,7 @@ xhttp.onload = function() {
 	  document.querySelector("#myList").appendChild(listItem);
   }
  }
-xhttp.open("GET", "http://localhost:9001/api/v1/hospital/qna", true);
+xhttp.open("GET", "/api/v1/hospital/qna", true);
 xhttp.setRequestHeader("username", 28);
 xhttp.send();
 

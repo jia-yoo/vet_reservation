@@ -55,7 +55,7 @@ const MemberId = localStorage.getItem("MemberId");
 
 $(document).ready(function() {
     $.ajax({
-        url: 'http://localhost:9001/user/chatList',
+        url: '/user/chatList',
         type: 'GET',
         dataType: 'json',
         headers: {

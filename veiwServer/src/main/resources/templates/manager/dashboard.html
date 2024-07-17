@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', function() {
     fetchHospitalJoinDays();
 });
 function allList(){
-	fetch("http://localhost:9001/api/v1/manager/support/qna/no-answer", {
+	fetch("/api/v1/manager/support/qna/no-answer", {
 		method : "GET",
 		headers: {
 	        'Authorization': `${token}`
@@ -98,7 +98,7 @@ function fetchMemberCounts() {
     let userCnt = 0;
     let hospitalCnt = 0;
 
-    fetch("http://localhost:9001/api/v1/manager/member/count", {
+    fetch("/api/v1/manager/member/count", {
         method: "GET",
         headers: {
             'Authorization': `${token}`
@@ -169,7 +169,7 @@ function fetchUserJoinDays() {
     console.log(weekJoinCount);
 
     // API 호출하여 데이터 가져오기
-    fetch("http://localhost:9001/api/v1/manager/member/user/join-count", {
+    fetch("/api/v1/manager/member/user/join-count", {
         method: "GET",
         headers: {
             'Authorization': `${token}`
@@ -255,7 +255,7 @@ function fetchHospitalJoinDays() {
     console.log(weekJoinCount);
 
     // API 호출하여 데이터 가져오기
-    fetch("http://localhost:9001/api/v1/manager/member/hospital/join-count", {
+    fetch("/api/v1/manager/member/hospital/join-count", {
         method: "GET",
         headers: {
             'Authorization': `${token}`

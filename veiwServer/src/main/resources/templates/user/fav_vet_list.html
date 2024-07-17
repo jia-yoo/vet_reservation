@@ -62,7 +62,7 @@ ready();
 			
 			
 		}
-		xhttp.open("get", "http://localhost:9001/api/v1/user/fav_vet/"+localStorage.getItem("MemberId"));
+		xhttp.open("get", "/api/v1/user/fav_vet/"+localStorage.getItem("MemberId"));
 		//xhttp.setRequestHeader("Content-type", "application/json");
 		var token = localStorage.getItem('token');
 		if (token) {
@@ -88,7 +88,7 @@ ready();
 			
 			
 		}
-		xhttp.open("delete", "http://localhost:9001/api/v1/user/fav_vet/"+bookmarkId);
+		xhttp.open("delete", "/api/v1/user/fav_vet/"+bookmarkId);
 		//xhttp.setRequestHeader("Content-type", "application/json");
 		var token = localStorage.getItem('token');
 		if (token) {

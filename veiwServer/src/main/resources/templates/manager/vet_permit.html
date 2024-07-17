@@ -34,7 +34,7 @@
 </div>
 <script>
 const token = localStorage.getItem("token");
-fetch("http://localhost:9001/api/v1/manager/permit", {
+fetch("/api/v1/manager/permit", {
 	method : "GET",
 	headers: {
         'Authorization': `${token}`
@@ -76,7 +76,7 @@ fetch("http://localhost:9001/api/v1/manager/permit", {
 
 function permitOk(event, id){
 	if(confirm("승인하시겠습니까?")){
-		fetch("http://localhost:9001/api/v1/manager/permit/" + id,{
+		fetch("/api/v1/manager/permit/" + id,{
 			method : "PUT",
 			headers: {
 		        'Authorization': `${token}`
@@ -97,7 +97,7 @@ function permitOk(event, id){
 
 function permitNo(event, id){
 	if(confirm("반려하시겠습니까?")){
-		fetch("http://localhost:9001/api/v1/manager/permit/" + id,{
+		fetch("/api/v1/manager/permit/" + id,{
 			method : "DELETE",
 			headers: {
 		        'Authorization': `${token}`

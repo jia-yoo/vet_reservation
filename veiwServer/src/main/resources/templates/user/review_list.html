@@ -109,7 +109,7 @@ ready();
 			
 			
 		}
-		xhttp.open("get", "http://localhost:9001/api/v1/user/reservationList/"+localStorage.getItem("MemberId"));
+		xhttp.open("get", "/api/v1/user/reservationList/"+localStorage.getItem("MemberId"));
 	    //xhttp.setRequestHeader("Content-type", "application/json");
 	    var token = localStorage.getItem('token');
 	    if (token) {
