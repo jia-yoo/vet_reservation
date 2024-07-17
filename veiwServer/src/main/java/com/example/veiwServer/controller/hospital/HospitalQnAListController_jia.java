@@ -22,7 +22,7 @@ public class HospitalQnAListController_jia {
 	
 	@GetMapping("/qna")
 	public List<Support> getMyQnAList(HttpServletRequest request) {
-		Long userId = Long.parseLong(request.getHeader("username"));
+		Long userId = Long.parseLong(request.getHeader("MemberId"));
 		return supportRepo.findAllByMemberId(userId);
 	}
 }
