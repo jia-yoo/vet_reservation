@@ -16,7 +16,7 @@ function address1SelectChanged(callback = null) {
             callback();
         };
     };
-    xhttp.open("get", "/api/v1/common/address2/" + address1, true);
+    xhttp.open("get", " /api/v1/common/address2/" + address1, true);
     xhttp.send();
 }
 
@@ -36,7 +36,7 @@ function readyAddress(callback = null){
             callback();
         };
    };
-   xhttp.open("get", "/api/v1/common/address1", true);
+   xhttp.open("get", " /api/v1/common/address1", true);
   // xhttp.setRequestHeader("Content-type", "application/json");
    xhttp.send();
 }

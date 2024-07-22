@@ -28,6 +28,10 @@ INDEX VERSION 1.134+C:\Users\GG\Documents\team3\animal\.metadata\.plugins\org.ec
 213870352.index
 2385724210.index
 1670074324.index
+<<<<<<< HEAD
+=======
+4276677485.index
+>>>>>>> eff0ba2e102cfe8ba9714fc7142ab33345caa673
 254893598.index
 1267428976.index
 1216796083.index

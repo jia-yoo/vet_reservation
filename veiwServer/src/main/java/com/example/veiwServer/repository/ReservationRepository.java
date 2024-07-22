@@ -1,7 +1,10 @@
 package com.example.veiwServer.repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -10,14 +13,13 @@ import com.example.veiwServer.dto.UserReservationDto;
 import com.example.veiwServer.entity.Reservation;
 
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
-
-	@Query(value = "SELECT * FROM reservation WHERE hospital_id = :memberId AND status = :status", nativeQuery = true)
-	List<Reservation> findAllByHospitalIdAndStatus(@Param("memberId")Long memberId, @Param("status")String status);
+	@Query(value = "SELECT * FROM reservation WHERE hospital_id = :memberId AND status = :status ORDER BY reservation_datetime asc", nativeQuery = true)
+	Page<Reservation> findAllByHospitalIdAndStatus(Pageable pageable, @Param("memberId")Long memberId, @Param("status")String status);
 	
 	@Query(value = "SELECT AVG(RATING) FROM reservation WHERE hospital_id = :hospitalId AND !ISNULL(RATING);", nativeQuery = true)
 	Long findAvgReview(@Param("hospitalId") Long hospitalId);
 
-	@Query(value = "SELECT * FROM reservation WHERE doctor_id = :doctorId", nativeQuery = true)
+	@Query(value = "SELECT * FROM reservation WHERE doctor_id = :doctorId AND STATUS != '취소'", nativeQuery = true)
 	List<Reservation> findAllByDoctorId(@Param("doctorId")Long doctorId);
 	
 	@Query(value = "SELECT * FROM reservation WHERE hospital_id= :hospitalId AND !isnull(review) ORDER BY updated_at DESC", nativeQuery = true)
@@ -40,6 +42,10 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 			+ "LEFT JOIN doctor d\r\n"
 			+ "ON re.doctor_id = d.id\r\n"
 			+ "WHERE re.user_id = :userId order by re.reservation_datetime desc;", nativeQuery = true )
-	List<UserReservationDto> findReserListByUserId(@Param("userId")Long userId);	
+	List<UserReservationDto> findReserListByUserId(@Param("userId")Long userId);
+
+	List<Reservation> findByHospitalId(Long memberId);
+
+	List<Reservation> findByDoctorIdAndReservationDatetime(Long doctorId, LocalDateTime reservationDatetime);
 	
 }

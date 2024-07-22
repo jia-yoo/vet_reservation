@@ -2,25 +2,24 @@ package com.example.veiwServer.dto;
 
 import java.time.LocalDateTime;
 
-import com.example.veiwServer.entity.Member;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class ChatRoomListDto {
 
-    private Long chatId;
-    private Member sender;
-    private Member receiver;
-    private String message;
-    private Boolean isRead;
-    private LocalDateTime sendDate;
-    private Long chatRoomId;
-    private Member user;
-    private Member hospital;
+	private Long chatRoomId;
+    private String userName;
+    private String hospitalName;
+    private String lastMessage;
+    
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime lastMessageSendDate;
 	
 }

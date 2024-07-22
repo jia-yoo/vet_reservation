@@ -12,7 +12,7 @@ const searchAreaBtn = document.querySelector("#searchAreaBtn");
 const MIN_ZOOM_LEVEL = 14; // 검색 가능 최소 줌 레벨
 
 // AJAX 요청 설정
-const xhttp = new XMLHttpRequest();
+const x  = new XMLHttpRequest();
 xhttp.onload = function() {
     let data = JSON.parse(this.responseText);
     let hospitals = data.동물병원;
@@ -189,6 +189,7 @@ function searchHospitals(center, hospitals, map) {
 function getMemVetList(params, map, currentPos) {
     const xhttp = new XMLHttpRequest();
     xhttp.onload = function() {
+		responseCheck(this);
         if (this.status === 200) {
             let data = JSON.parse(this.responseText);
             data.forEach(hospital => {
@@ -215,7 +216,7 @@ function getMemVetList(params, map, currentPos) {
         }
         addHospitalToList(map, currentPos);
     };
-    const url = "/api/v1/near-vet-list?" + params.toString();
+    const url = " /api/v1/near-vet-list?" + params.toString();
     xhttp.open("GET", url, true);
     xhttp.setRequestHeader("MemberId", localStorage.getItem("MemberId"));
     xhttp.setRequestHeader("Authorization", localStorage.getItem("token"));
@@ -335,52 +336,6 @@ function loadList(hospital, index){
     }
 }
 
-function sortingReserv(e){
-	 if(nearVet.length != 0){
-        nearVet.sort((a, b) => {
-            const aInMemVet = Object.keys(memVet).includes(a["사업장명"]);
-            const bInMemVet = Object.keys(memVet).includes(b["사업장명"]);
-
-            if (aInMemVet && !bInMemVet) {
-                return -1; // a를 b보다 앞으로
-            }
-            if (!aInMemVet && bInMemVet) {
-                return 1; // b를 a보다 앞으로
-            }
-            return 0; // 변화 없음
-        });
-
-        // 정렬된 결과를 콘솔에 출력
-        document.querySelector(".inner").innerHTML="";
-        nearVet.forEach((vetItem, index) =>{
-			loadList(vetItem, index);
-		})
-    }
-}
-
-function sortingPoint(e) {
-     if (nearVet.length != 0) {
-		sortingReserv(e);
-        nearVet.sort((a, b) => {
-            const aPartnership = memVet[a["사업장명"]] && memVet[a["사업장명"]].partnership === true;
-            const bPartnership = memVet[b["사업장명"]] && memVet[b["사업장명"]].partnership === true;
-
-            if (aPartnership && !bPartnership) {
-                return -1; // a를 b보다 앞으로
-            }
-            if (!aPartnership && bPartnership) {
-                return 1; // b를 a보다 앞으로
-            }
-            return 0; // 변화 없음
-        });
-
-        // 정렬된 결과를 콘솔에 출력
-        document.querySelector(".inner").innerHTML="";
-       	nearVet.forEach((vetItem, index) =>{
-			loadList(vetItem, index);
-		})
-    }
-}
 
 
 

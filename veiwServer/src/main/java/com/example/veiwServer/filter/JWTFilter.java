@@ -58,17 +58,8 @@ public class JWTFilter extends OncePerRequestFilter {
 				//Bearer 부분 제거 후 순수 토큰만 획득
         String token = authorization.split(" ")[1];
         try {
-            // 토큰 소멸 시간 검증
-            if (jwtUtil.isExpired(token)) {
-                System.out.println("Token expired"); // 콘솔 출력
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401 상태 코드 설정
-                response.setContentType("application/json");
-                response.setCharacterEncoding("UTF-8");
-                response.getWriter().write("{\"error\": \"Token expired\"}");
-                response.getWriter().flush();
-                response.getWriter().close();
-                return;
-            }
+            // 토큰 소멸 시간 검증 은 try/catch에서 catch로 잡아냄
+
 
             // 토큰에서 username과 role 획득
             String username = jwtUtil.getUsername(token);
@@ -90,24 +81,11 @@ public class JWTFilter extends OncePerRequestFilter {
 
         } catch (ExpiredJwtException e) {
             // 만료된 토큰 처리
+        	String msg = "tokenExpired";
+        	response.addHeader("msg", msg);
+        	//response.addHeader("Access-Control-Expose-Headers", "msg");
             System.out.println("ExpiredJwtException: Token expired"); // 콘솔 출력
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401 상태 코드 설정
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-            response.getWriter().write("{\"error\": \"Token expired\"}");
-            response.getWriter().flush();
-            response.getWriter().close();
-            return;
-        } catch (Exception e) {
-            // 기타 오류 처리
-            System.out.println("Exception: Invalid token"); // 콘솔 출력
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401 상태 코드 설정
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-            response.getWriter().write("{\"error\": \"Invalid token\"}");
-            response.getWriter().flush();
-            response.getWriter().close();
-            return;
+           
         }
 
         filterChain.doFilter(request, response);

@@ -1,7 +1,16 @@
 package com.example.veiwServer.filter;
 
-public class UserNotApprovedException extends RuntimeException {
-    public UserNotApprovedException(String message) {
+import org.springframework.security.core.AuthenticationException;
+
+public class UserNotApprovedException extends AuthenticationException{
+   
+	
+	public UserNotApprovedException(String message) {
         super(message);
+		System.out.println(message);
     }
+
+	
+	
+	
 }

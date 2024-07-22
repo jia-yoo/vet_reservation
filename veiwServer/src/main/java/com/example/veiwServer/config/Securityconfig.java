@@ -1,5 +1,6 @@
 package com.example.veiwServer.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -7,6 +8,7 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
@@ -22,11 +24,14 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @Configuration
 @EnableWebSecurity
-public class Securityconfig {
+public class Securityconfig  {
 	
 	private final AuthenticationConfiguration authenticationConfiguration;
 	//JWTUtil 주입
 	private final JWTUtil jwtUtil;
+	
+	@Autowired
+	UserDetailsService userDetailsService;
 	
 	public Securityconfig(AuthenticationConfiguration authenticationConfiguration,JWTUtil jwtUtil) {
 
@@ -44,6 +49,14 @@ public class Securityconfig {
 	public BCryptPasswordEncoder bCryptPasswordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
+	
+	/*
+	 * @Bean public DaoAuthenticationProvider daoAuthenticationProvider() {
+	 * DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+	 * provider.setUserDetailsService(userDetailsService);
+	 * provider.setPasswordEncoder(bCryptPasswordEncoder()); return provider; }
+	 */
+	
 	
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -81,11 +94,12 @@ public class Securityconfig {
 		http
 			.authorizeHttpRequests(auth -> auth
 					.requestMatchers("/", "/login", "/images/**","api/v1/common/**",  "/api/v1/near-vet-list", "/api/v1/vet-list","/api/v1/fcm/**").permitAll()
-					//.requestMatchers("/v3/**","/swagger-ui/**").permitAll()
-//					.requestMatchers("/api/v1/hospital/**").hasRole("HOSPITAL")
-//					.requestMatchers("api/v1/user/**").hasRole("USER")
-//					.requestMatchers("/api/v1/manager/**").hasRole("ADMIN")
-					.anyRequest().permitAll());
+					.requestMatchers("/v3/**","/swagger-ui/**").permitAll()
+					.requestMatchers("/api/v1/hospital/**").hasAnyRole("HOSPITAL", "ADMIN")
+					
+					.requestMatchers("api/v1/user/**","api/petgame/**").hasAnyRole("USER", "ADMIN")
+					.requestMatchers("/api/v1/manager/**").hasRole("ADMIN")
+					.anyRequest().authenticated() );
 			
 		//세션 설정 : Stateless
 		http

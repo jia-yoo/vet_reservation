@@ -12,6 +12,7 @@ const config = {
 
 const game = new Phaser.Game(config)
 
+
 let pet
 let feedButton
 let playButton
@@ -28,6 +29,7 @@ let lastGivenTimeMorning
 let lastGivenTimeAfternoon
 let lastGivenTimeEvening
 let isFullyGrown
+const token = localStorage.getItem("token");
 let userId = localStorage.getItem("MemberId")
 
 function preload() {
@@ -114,7 +116,12 @@ function updateText() {
 }
 
 function loadData() {
-  fetch(`/api/petgame/${userId}`)
+  fetch(` /api/petgame/${userId}`, {
+	method : "GET",
+	headers: {
+        'Authorization': `${token}`
+    }
+})
     .then(response => response.json())
     .then(data => {
       feedTickets = data.feedCount
@@ -148,10 +155,11 @@ function saveData() {
     isFullyGrown: isFullyGrown
   }
 
-  fetch(`/api/petgame/${userId}`, {
+  fetch(` /api/petgame/${userId}`, {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json;charset=utf-8'
+      'Content-Type': 'application/json;charset=utf-8',
+      'Authorization': `${token}`
     },
     body: JSON.stringify(data)
   })
