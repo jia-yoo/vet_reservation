@@ -4,9 +4,30 @@
 		<div class="d-lg-none">
 			<a href="#" onclick="openMobileMenu()" class="navbar-brand">메뉴</a>
 		</div>
-		<div class="ms-auto">
+		<div class="ms-auto d-flex">
+		<a id="chat" href="/user/chatList" class="navbar-brand me-4" style="display:none;">💬 챗팅</a>
 		<a id="login-link" class="navbar-brand" href="/login_form">로그인</a>
-		<a id="mypage-link" class="navbar-brand" href="#" onclick="mypage()" style="display: none;">마이페이지</a>
+		<div id="mypage-link" class="navbar-brand" style="display: none;">
+			<div class="dropdown">
+			  <a class="btn btn-none dropdown-toggle nav-link rounded-0" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+			   마이페이지
+			  </a>
+			
+			  <ul class="dropdown-menu">
+			    <li><a class="dropdown-item" href="/user/my_info_edit">내 정보 수정</a></li>
+			    <li><a class="dropdown-item" href="/user/review_list">내가 쓴 병원 리뷰</a></li>
+			    <!-- <li><a class="dropdown-item" href="#">커뮤니티(집수다) 관리</a></li> -->
+			    <li><a class="dropdown-item" href="/user/myPetList">반려동물 리스트</a></li>
+			    <!-- <li><a class="dropdown-item" href="#">경매 참여 내역</a></li> -->
+			    <!-- <li><a class="dropdown-item" href="#">펀딩 참여 내역</a></li> -->
+			    <!-- <li><a class="dropdown-item" href="#">쿠폰함</a></li> -->
+			    <li><a class="dropdown-item" href="#">포인트 관리</a></li>
+			    <li><a class="dropdown-item" href="/user/fav_vet_list">즐겨찾기 내역</a></li>
+			    <li><a class="dropdown-item" href="/user/myQnaList">문의내역</a></li>
+			  </ul>
+			</div>
+		
+		</div>
 		<span class="mx-3" id ="bar"> | </span>
 		<a id="logout-link" class="navbar-brand" href="#" onclick="logout()" style="display: none;">로그아웃</a>
 		<a id="register-link" class="navbar-brand" href="/register_form">회원가입</a>
@@ -21,16 +42,16 @@
       </a>
 
       <ul class="nav nav-pills user-nav d-none d-lg-flex">
-        <li class="nav-item"><a href="/" class="nav-link fs-5" aria-current="page">내주변 동물병원</a></li>
-        <li class="nav-item"><a href="/user/vet_list_region" class="nav-link fs-5">지역별 동물병원</a></li>
-        <li class="nav-item"><a href="/user/reserv_list" class="nav-link fs-5">병원 예약 내역</a></li>
-        <li class="nav-item"><a href="#" class="nav-link fs-5">이벤트 경매</a></li>
-        <li class="nav-item"><a href="#" class="nav-link fs-5">펀딩</a></li>
-        <li class="nav-item"><a href="/webGame/" class="nav-link fs-5">펫키우기</a></li>
-        <li class="nav-item"><a href="#" class="nav-link fs-5">집수다</a></li>
+        <li class="nav-item"><a href="/" class="nav-link fs-5 rounded-0" aria-current="page">내주변 동물병원</a></li>
+        <li class="nav-item"><a href="/user/vet_list_region" class="nav-link fs-5 rounded-0">지역별 동물병원</a></li>
+        <li class="nav-item"><a href="/user/reserv_list" class="nav-link fs-5 rounded-0">병원 예약 내역</a></li>
+        <!-- <li class="nav-item"><a href="#" class="nav-link fs-5 rounded-0">이벤트 경매</a></li> -->
+        <!-- <li class="nav-item"><a href="#" class="nav-link fs-5 rounded-0">펀딩</a></li>-->
+        <li class="nav-item"><a href="/webGame/" class="nav-link fs-5 rounded-0">펫키우기</a></li>
+        <!--<li class="nav-item"><a href="#" class="nav-link fs-5 rounded-0">집수다</a></li>-->
         <li class="nav-item">
 	        <div class="dropdown">
-			  <a class="btn btn-none dropdown-toggle nav-link fs-5" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+			  <a class="btn btn-none dropdown-toggle nav-link fs-5 rounded-0" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
 			   고객센터
 			  </a>
 			
@@ -58,9 +79,9 @@
 		    <li class="list-group-item bg-user-sub border-white border-opacity-50"><a href="/" class="nav-link fs-5">내주변 동물병원</a></li>
 		    <li class="list-group-item bg-user-sub border-white border-opacity-50"><a href="/user/vet_list_region" class="nav-link fs-5">지역별 동물병원</a></li>
 		    <li class="list-group-item bg-user-sub border-white border-opacity-50"><a href="/user/reserv_list" class="nav-link fs-5">병원 예약 내역</a></li>
-		    <li class="list-group-item bg-user-sub border-white border-opacity-50"><a href="#" class="nav-link fs-5">이벤트 경매</a></li>
-		    <li class="list-group-item bg-user-sub border-white border-opacity-50"><a href="#" class="nav-link fs-5">펀딩</a></li>
-		    <li class="list-group-item bg-user-sub border-white border-opacity-50"><a href="/webGame/" class="nav-link fs-5">펫키우기</a></li>
+		    <!-- <li class="list-group-item bg-user-sub border-white border-opacity-50"><a href="#" class="nav-link fs-5">이벤트 경매</a></li> -->
+		    <!-- <li class="list-group-item bg-user-sub border-white border-opacity-50"><a href="#" class="nav-link fs-5">펀딩</a></li>
+		    <li class="list-group-item bg-user-sub border-white border-opacity-50"><a href="/webGame/" class="nav-link fs-5">펫키우기</a></li> -->
 		    <li class="list-group-item bg-user-sub border-white border-opacity-50 fs-5">고객센터</li>
 		    <li class="list-group-item bg-user-sub border-white border-opacity-50"><a href="/noticeList" class="nav-link fs-6 ps-3">공지사항</a></li>
 		    <li class="list-group-item bg-user-sub border-white border-opacity-50"><a href="/qnaForm" class="nav-link fs-6 ps-3">문의작성</a></li>
@@ -68,15 +89,19 @@
 	</div>
 </div>
 </header>
+<script src="https://www.gstatic.com/firebasejs/9.9.3/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.9.3/firebase-messaging-compat.js"></script>
+<script src="/js/fcm.js"></script>
+<script src="/js/fcmsend.js"></script>
 <script>
     function logout() {
         localStorage.clear();
         window.location.href = "/";
     }
     
-    function mypage() {
-        window.location.href = "/user/my_info_edit";
-    }
+//     function mypage() {
+//         window.location.href = "/user/my_info_edit";
+//     }
     
     document.addEventListener("DOMContentLoaded", function() {
         const memberId = localStorage.getItem('MemberId');
@@ -86,18 +111,21 @@
         const mypageLink = document.getElementById('mypage-link');
         const logoutLink = document.getElementById('logout-link');
         const bar = document.getElementById('bar');
+        const chat = document.getElementById('chat');
         if (memberId) {
             loginLink.style.display = 'none';
             registerLink.style.display = 'none';
             logoutLink.style.display = '';
             mypageLink.style.display = '';
             //bar.style.display = 'none';
+            chat.style.display = '';
         } else {
             loginLink.style.display = '';
             registerLink.style.display = '';
             logoutLink.style.display = 'none';
             mypageLink.style.display = 'none';
             bar.style.display = '';
+            chat.style.display = 'none';
         }
         
         if (role === null) {
@@ -132,6 +160,38 @@
            //});
         }
 
+     // 현재 URL 가져오기
+	    const currentPath = window.location.pathname;
+		console.log(currentPath);	
+	    // 모든 nav-link 요소 가져오기
+	    const navLinks = document.querySelectorAll('.nav-link');
+
+	    // 각 nav-link 요소에 대해 현재 URL과 비교하여 active 클래스 추가
+	    navLinks.forEach(function (link) {
+	        if (link.getAttribute('href') === currentPath) {
+	            link.classList.add('active-pet');
+	        }
+	    });
+
+	    // 드롭다운 메뉴 내부의 링크에 대해서도 같은 작업 수행
+	    const dropdownItems = document.querySelectorAll('.dropdown-item');
+	    dropdownItems.forEach(function (item) {
+	        if (item.getAttribute('href') === currentPath) {
+	            item.classList.add('active-pet');
+	            // 부모 드롭다운 링크에도 active 클래스 추가
+	            item.closest('.dropdown').querySelector('.dropdown-toggle').classList.add('active-pet');
+	        }
+	    });
+	    
+	    // 만약 현재 페이지가 상세보기 페이지인 경우, 부모 메뉴의 active 상태도 설정
+    	//if (currentPath.includes('/manager/userDetail')) {
+	        // 부모 메뉴 항목에 active 클래스 추가
+	       // const parentMenuLink = document.querySelector('a[href="/manager/userList"]');
+	       // if (parentMenuLink) {
+	       //     parentMenuLink.classList.add('active-pet');
+	        //}
+	    //}
+        
     });
     
     const mobileMenu = document.querySelector("#mobileMenu");
@@ -151,6 +211,61 @@
 	mobileMenuCloseBtn.addEventListener("click", function() {
 	    closeMobileMenu(); // 클릭 시 모바일 메뉴 닫기
 	});
+	
+    
+  	 function responseCheck(response){
+ 		 const msg =response.getResponseHeader("msg");
+ 		 if(msg && msg=="tokenExpired"){
+ 				alert("로그인 시간이 만료되었습니다.다시 로그인 해주세요.");
+ 				 localStorage.clear();
+ 				 window.location.href="/login_form";
+ 			}
+ 		 if(response.status ==401){
+ 			 alert("사용자 정보 인증에 실패하였습니다.로그인 해주세요.");
+ 			 window.location.href="/login_form";
+ 		 }else if(response.status ==403){
+ 			 alert("접근 가능한 페이지가 아닙니다.");
+ 			if(localStorage.getItem("role")=="ROLE_HOSPITAL"){
+				 window.location.href="/hospital";
+			 }else{
+	 			 window.location.href="/";
+				 }
+ 		 }else if(response.status ==400){
+ 			 alert("잘못된 접근입니다.")
+ 			if(localStorage.getItem("role")=="ROLE_HOSPITAL"){
+				 window.location.href="/hospital";
+			 }else{
+ 				 window.location.href="/";
+			 }
+ 		 }
+   }
+  	 function fetchResponseCheck(response){
+ 		 const msg =response.headers.get("msg");
+ 		 if(msg && msg=="tokenExpired"){
+ 				alert("로그인 시간이 만료되었습니다.다시 로그인 해주세요.");
+ 				 localStorage.clear();
+ 				 window.location.href="/login_form";
+ 			}
+ 		 if(response.status ==401){
+ 			 alert("사용자 정보 인증에 실패하였습니다.로그인 해주세요.");
+ 			 window.location.href="/login_form";
+ 		 }else if(response.status ==403){
+ 			 alert("접근 가능한 페이지가 아닙니다.");
+ 			 if(localStorage.getItem("role")=="ROLE_HOSPITAL"){
+ 				 window.location.href="/hospital";
+ 			 }else{
+	 			 window.location.href="/";
+			 }
+ 		 }else if(response.status ==400){
+ 			 alert("잘못된 접근입니다.")
+ 			if(localStorage.getItem("role")=="ROLE_HOSPITAL"){
+				 window.location.href="/hospital";
+			 }else{
+	 			 window.location.href="/";
+			 }
+ 		 }
+   }
 </script>
 </div>
+
 
