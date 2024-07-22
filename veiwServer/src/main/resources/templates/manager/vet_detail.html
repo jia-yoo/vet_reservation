@@ -65,13 +65,16 @@
 <script>
 const token = localStorage.getItem("token");
 const memberId = document.querySelector("#memberId").value;
-fetch("/api/v1/manager/user/" + memberId, {
+fetch(" /api/v1/manager/user/" + memberId, {
 	method : "GET",
 	headers: {
         'Authorization': `${token}`
     }
 })
-.then(response => response.text())
+.then(response =>{
+	fetchResponseCheck(response);
+	return response.text();
+})
 .then(data => {
 	const obj = JSON.parse(data);
 	console.log(obj);

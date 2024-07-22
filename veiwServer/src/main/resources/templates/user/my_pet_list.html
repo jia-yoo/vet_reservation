@@ -41,7 +41,7 @@ $(document).ready(function() {
 
 	console.log("memId 출력 : " + MemberId);
     $.ajax({
-        url: '/user/mypage/myPet',
+        url: ' /user/mypage/myPet',
         type: 'GET',
         dataType: 'json',
         headers: {
@@ -75,6 +75,9 @@ $(document).ready(function() {
             	$("#petList").html("나의 반려동물이 없습니다. 반려동물을 등록해보세요!");
             }
         },
+        complete: function(jqXHR, textStatus) {
+           responseCheck(jqXHR);
+        },
         error: function(xhr, status, error) {
             console.error('Error fetching pet data:', error);
         }
@@ -88,7 +91,7 @@ function edit(id) {
 function deletePet(id) {
         
     $.ajax({
-        url: '/user/mypage/myPet/'+id,
+        url: ' /user/mypage/myPet/'+id,
         type: 'DELETE',
         headers: {
             'Authorization': token,

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.veiwServer.dto.ChatRoomListDto;
+import com.example.veiwServer.dto.IChatRoomListDto;
 import com.example.veiwServer.entity.Chat;
 import com.example.veiwServer.entity.ChatRoom;
 import com.example.veiwServer.entity.Member;
@@ -163,5 +164,7 @@ public class ChatService {
             return chatroomRepo.save(newChatRoom);
         }
 	}
+	
+	
+	
 }
-

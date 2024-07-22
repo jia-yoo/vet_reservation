@@ -33,4 +33,3 @@ public class ChatRoom {
     private Member hospital;
     
 }
-

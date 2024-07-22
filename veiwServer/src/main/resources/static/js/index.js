@@ -12,7 +12,7 @@ const searchAreaBtn = document.querySelector("#searchAreaBtn");
 const MIN_ZOOM_LEVEL = 14; // 검색 가능 최소 줌 레벨
 
 // AJAX 요청 설정
-const x  = new XMLHttpRequest();
+const xhttp = new XMLHttpRequest();
 xhttp.onload = function() {
     let data = JSON.parse(this.responseText);
     let hospitals = data.동물병원;
@@ -335,6 +335,7 @@ function loadList(hospital, index){
         }
     }
 }
+
 
 
 

@@ -91,7 +91,7 @@
 <script>
 const token = localStorage.getItem("token");
 const memberId = document.querySelector("#memberId").value;
-fetch("/api/v1/manager/user/" + memberId, {
+fetch(" /api/v1/manager/user/" + memberId, {
 	method : "GET",
 	headers: {
         'Authorization': `${token}`
@@ -101,7 +101,8 @@ fetch("/api/v1/manager/user/" + memberId, {
 .then(data => {
 	const obj = JSON.parse(data);
 	console.log(obj);
-	let dateTime = obj.createdAt.substring(0,obj.createdAt.indexOf("T"));
+	let dateTime = obj.createdAt[0] + "-" + obj.createdAt[1] + "-" + obj.createdAt[2];
+	
 	let address = obj.address.replace(/\/\//g, " ");
 	document.getElementById("name").innerHTML = obj.name;
 	document.getElementById("username").innerHTML = obj.username;
@@ -113,13 +114,16 @@ fetch("/api/v1/manager/user/" + memberId, {
 .catch(error => console.log(error));
 
 
-fetch("/api/v1/manager/point/" + memberId,{
+fetch(" /api/v1/manager/point/" + memberId,{
 	method : "GET",
 	headers: {
         'Authorization': `${token}`
     }
 })
-.then(response => response.text())
+.then(response =>{
+	fetchResponseCheck(response);
+	return response.text();
+})
 .then(data => {
 	const pointList = JSON.parse(data);
 	console.log(pointList);
@@ -146,13 +150,16 @@ fetch("/api/v1/manager/point/" + memberId,{
 })
 .catch(error => console.log(error));
 
-fetch("/api/v1/manager/point/total/" + memberId,{
+fetch(" /api/v1/manager/point/total/" + memberId,{
 	method : "GET",
 	headers: {
         'Authorization': `${token}`
     }
 })
-.then(response => response.text())
+.then(response =>{
+	fetchResponseCheck(response);
+	return response.text();
+})
 .then(data => {
 	//console.log(data);
 	let totalnum = 0;
@@ -172,7 +179,7 @@ function addPoint(){
 	}
 	const sendData = JSON.stringify(addPointOj);
 	console.log(addPointOj);
-	fetch("/api/v1/manager/point",{
+	fetch(" /api/v1/manager/point",{
 		method : "POST",
 		headers : {
 			"Content-type" : "application/json",
@@ -180,7 +187,10 @@ function addPoint(){
 		},
 		body : sendData
 	})
-	.then(response => response.text())
+	.then(response =>{
+		fetchResponseCheck(response);
+		return response.text();
+	})
 	.then(data => {
 		console.log(data);
 		location.reload();

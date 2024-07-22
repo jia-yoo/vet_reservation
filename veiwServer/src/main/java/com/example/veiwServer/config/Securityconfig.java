@@ -93,13 +93,13 @@ public class Securityconfig  {
 		
 		http
 			.authorizeHttpRequests(auth -> auth
-					.requestMatchers("/", "/login", "/images/**","api/v1/common/**",  "/api/v1/near-vet-list", "/api/v1/vet-list","/api/v1/fcm/**").permitAll()
+					.requestMatchers("/", "/login", "/notice/**", "/images/**","api/v1/common/**",  "/api/v1/near-vet-list", "/api/v1/vet-list","/api/v1/fcm/**").permitAll()
 					.requestMatchers("/v3/**","/swagger-ui/**").permitAll()
 					.requestMatchers("/api/v1/hospital/**").hasAnyRole("HOSPITAL", "ADMIN")
 					
 					.requestMatchers("api/v1/user/**","api/petgame/**").hasAnyRole("USER", "ADMIN")
 					.requestMatchers("/api/v1/manager/**").hasRole("ADMIN")
-					.anyRequest().authenticated() );
+					.anyRequest().permitAll() );
 			
 		//세션 설정 : Stateless
 		http

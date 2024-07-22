@@ -177,7 +177,7 @@ document.getElementById('regBtn').addEventListener('click', function() {
     formData.append('isNeutered', document.querySelector('input[name="isNeutered"]:checked').value);
 
     $.ajax({
-        url: "http://localhost:9001/user/mypage/myPet",
+        url: " /user/mypage/myPet",
         type: "POST",
         data: formData,
         headers: {
