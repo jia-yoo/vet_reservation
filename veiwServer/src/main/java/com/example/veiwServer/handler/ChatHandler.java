@@ -18,6 +18,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.extern.log4j.Log4j2;
 
+
 @Component
 @Log4j2
 public class ChatHandler extends TextWebSocketHandler{

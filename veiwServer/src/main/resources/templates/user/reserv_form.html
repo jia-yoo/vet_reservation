@@ -79,17 +79,17 @@
 		integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
 		crossorigin="anonymous"></script>
 <script th:inline="javascript" type="text/javascript" src="/js/reservation.js"></script>
-
 <script th:inline="javascript">
 let hosId = "[[${id}]]";
 
 
 const xhttp = new XMLHttpRequest();
 xhttp.onload = function() {
+	responseCheck(this);
 	let data = JSON.parse(this.responseText);
 	loadBasicInfo(data);
 }
-xhttp.open("GET", "/api/v1/user/reservation?id="+hosId, true);
+xhttp.open("GET", " /api/v1/user/reservation?id="+hosId, true);
 xhttp.setRequestHeader("MemberId", localStorage.getItem("MemberId"));
 xhttp.setRequestHeader("Authorization", localStorage.getItem("token"));
 xhttp.setRequestHeader("role", localStorage.getItem("role"));
@@ -128,10 +128,16 @@ function submitForm(e){
 	
 	 const xhttp = new XMLHttpRequest();
 	  xhttp.onload = function() {
+		 responseCheck(this);
 	     alert("예약이 성공적으로 완료되었습니다");
+	     title='예약 알람';
+	     reservedate= document.querySelector("input[type=date]").value;
+	     body=` ${reservedate}일 예약이 들어왔습니다.`;
+	     receiverId=hosId;
+	     sendTokenToMessageReceiver(title, body);
 	     location.href="/user/reserv_list"
 	  }
-	  xhttp.open("POST", "/api/v1/user/reservation", true);
+	  xhttp.open("POST", " /api/v1/user/reservation", true);
 	  xhttp.setRequestHeader("MemberId", localStorage.getItem("MemberId"));
 	  xhttp.setRequestHeader("Authorization", localStorage.getItem("token"));
 	  xhttp.setRequestHeader("role", localStorage.getItem("role"));

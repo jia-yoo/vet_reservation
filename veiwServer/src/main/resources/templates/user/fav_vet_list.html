@@ -36,13 +36,16 @@
 
 
 <script>
+
 ready();
 	function ready(){
 		const favList = document.querySelector("#favList");
 		favList.innerHTML='';
 		const xhttp = new XMLHttpRequest();
 		xhttp.onload = function() {
-			alert(this.responseText);
+			//alert(this.responseText);
+			responseCheck(this);
+			if(this.status ==200){
 			const list = JSON.parse(this.responseText);
 			list.forEach(vet =>{
 				var adds = vet.address.split("//");
@@ -59,10 +62,13 @@ ready();
 						</div>	
 					</div>`;
 			});
+				
+			}
+			
 			
 			
 		}
-		xhttp.open("get", "/api/v1/user/fav_vet/"+localStorage.getItem("MemberId"));
+		xhttp.open("get", " /api/v1/user/fav_vet/"+localStorage.getItem("MemberId"));
 		//xhttp.setRequestHeader("Content-type", "application/json");
 		var token = localStorage.getItem('token');
 		if (token) {
@@ -72,29 +78,33 @@ ready();
 	}
 	
 	function removeBookmark(e){
-		var bookmarkId = e.target.id;
-		const xhttp = new XMLHttpRequest();
-		xhttp.onload = function() {
-			try{
-				if(this.status ==200){
-					window.location.href="/user/fav_vet_list";
+		const result =confirm("즐겨찾기에서 삭제하시겠습니까?");
+		if(result){
+			var bookmarkId = e.target.id;
+			const xhttp = new XMLHttpRequest();
+			xhttp.onload = function() {
+				try{
+					if(this.status ==200){
+						window.location.href="/user/fav_vet_list";
+					}
 				}
+				catch(e){
+					console.log(e);
+				}
+				
+				
+				
+				
 			}
-			catch(e){
-				console.log(e);
+			xhttp.open("delete", " /api/v1/user/fav_vet/"+bookmarkId);
+			//xhttp.setRequestHeader("Content-type", "application/json");
+			var token = localStorage.getItem('token');
+			if (token) {
+				xhttp.setRequestHeader("Authorization",token);
 			}
-			
-			
-			
-			
+			xhttp.send();
 		}
-		xhttp.open("delete", "/api/v1/user/fav_vet/"+bookmarkId);
-		//xhttp.setRequestHeader("Content-type", "application/json");
-		var token = localStorage.getItem('token');
-		if (token) {
-			xhttp.setRequestHeader("Authorization",token);
-		}
-		xhttp.send();
+		
 	}
 	
 	 document.addEventListener('click', function (event) {

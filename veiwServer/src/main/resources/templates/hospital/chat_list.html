@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html class="h-100" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>견강할고양</title>
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+<link href="/css/style.css" rel="stylesheet">
+<link href="/css/myPetList.css" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Jua&display=swap" rel="stylesheet">
+</head>
+<style>
+	.list-group{
+		
+		padding : 30px;
+		width : 60%;
+		margin : 0 auto;
+	}
+	
+	.hospitalName{
+		font-weight : bold;
+	}
+</style>
+<body class="d-flex flex-column h-100">
+<div th:replace="~{hospital/header :: header}"></div>
+<div class="container-xl">
+
+
+<h1 class="mt-3 mt-md-5 mb-3 mb-md-3">채팅방 목록</h1>
+<hr>
+	<div>
+		<div id="chatList" class="list-group">
+        </div>
+	</div>
+</div>
+
+<div th:replace="~{user/footer :: footer}"></div>
+<script src="https://momentjs.com/downloads/moment.js"></script>
+<script>
+
+const token = localStorage.getItem("token");
+const memberId = localStorage.getItem("MemberId");
+
+$(document).ready(function() {
+    $.ajax({
+        url: 'http://localhost:9001/chatList',
+        type: 'GET',
+        headers: {
+            'Authorization': token,
+            'MemberId': memberId
+        },
+        success: function(response) {
+            console.log(response);
+            var chatList = $("#chatList");
+            chatList.empty();  // 기존 내용을 비웁니다.
+            if (response.length > 0) {
+                for (var i = 0; i < response.length; i++) {
+                    var chat = response[i];
+                    
+                    // moment.js를 사용하여 날짜 형식을 변환합니다.
+                    var formattedDate = moment(chat.lastMessageSendDate).format('YYYY-MM-DD A hh:mm');
+                    
+                    var listItem = `
+                        <div class="list-group-item list-group-item-action">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-1">🐾 ${chat.userName} 고객님</h5>
+                                <small class="text-muted">${formattedDate}</small>
+                            </div>
+                            <p class="mb-1">${chat.lastMessage}</p>
+                            <button class="btn btn-outline-primary" onclick="chatLink(${chat.chatRoomId})">채팅하기</button>
+                        </div>
+                    `;
+                    chatList.append(listItem);
+                }
+            } else {
+            	chatList.html("<img src='/images/cute.png' style='width:160px; height:160px; margin : 0 auto;'>");
+            	chatList.append("<div class='list-group' style='text-align : center;'>아직 채팅 내역이 없네요!</div>");
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error('채팅목록 불러오기 에러발생', error);
+        }
+    });
+});
+
+
+
+function chatLink(chatRoomId){
+	window.location.href = '/hospital/chat/' + chatRoomId;
+}
+
+
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+</html>

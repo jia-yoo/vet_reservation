@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html class="h-100" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>알람 전송</title>
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+	crossorigin="anonymous">
+<link href="/css/style.css" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Jua&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+</head>
+<body class="d-flex flex-column h-100">
+	<div th:replace="~{hospital/header :: header}"></div>
+	<div class="container-xl">
+		<input type="hidden" name="reservId" th:value=${reservId}>
+		<div
+			class="container d-flex flex-wrap justify-content-between align-items-center">
+			<div
+				class="d-flex align-items-center mb-3 mb-lg-0 me-lg-auto link-body-emphasis text-decoration-none">
+				<h1 class="mt-3 mt-md-5 mb-3 mb-md-3">알림보내기</h1>
+			</div>
+			<div
+				class="col-12 col-lg-auto mb-3 mb-lg-0 d-flex align-items-center">
+				<div class="ms-2 mt-3 mt-md-5 mb-3mb-md-3">
+					<i class="bi bi-house-door-fill"></i>
+					<i class="bi bi-caret-right-fill"></i>
+					<span>알림 설정</span>
+				</div>
+			</div>
+		</div>
+		<hr />
+		<div>
+			<div class="input-group mb-3 mx-auto p-2" style='width: 700px'>
+				<span class="input-group-text">고객명</span> <input type="text"
+					class="form-control" name="username" id="username" disabled />
+			</div>
+			<div class="input-group mb-3 mx-auto p-2" style='width: 700px'>
+				<span class="input-group-text">반려동물정보</span> <input type="text"
+					class="form-control" name="petinfo" id="petinfo" disabled />
+			</div>
+
+			<div class="input-group mb-3 mx-auto p-2" style='width: 700px'>
+				<span class="input-group-text">제목</span> <input type="text"
+					class="form-control" id="title" placeholder="ex)예약 알람, 정기검진 알람" />
+			</div>
+
+			<div class="input-group mb-3 mx-auto p-2" style='width: 700px'>
+				<span class="input-group-text">내용</span> <input type="text"
+					class="form-control" id="content" />
+			</div>
+			<div class="d-grid gap-2 col-6 mx-auto" style='width: 400px'>
+				<button class="btn btn-primary opacity-75"
+					onclick="sendnotification()">알림 보내기</button>
+			</div>
+		</div>
+
+	</div>
+	<div th:replace="~{hospital/footer :: footer}"></div>
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+		crossorigin="anonymous"></script>
+	<script>
+	const memberId = localStorage.getItem("MemberId");
+	const token = localStorage.getItem("token");
+	const urlParams = new URLSearchParams(window.location.search);
+    const reservId = urlParams.get('id');
+	console.log(reservId);
+	let userid = '';
+	fetch(" /api/v1/hospital/reservation/" + reservId, {
+		method : "GET",
+		headers: {
+	        'Authorization': token
+	    }
+	})
+	.then(response => response.text())
+	.then(data => {
+		const obj = JSON.parse(data);
+		let isNeutered = "";
+		let gender = "";
+		obj.pet.isNeutered ? isNeutered = "Y" : isNeutered = "N";
+		obj.pet.gender=="female" ? gender = "여아" : gender = "남아";
+		userid = obj.user.id;
+		console.log(obj.pet.birthdate);
+		// 서버에서 받은 UTC 시간을 Date 객체로 변환
+	    const utcDate = new Date(obj.pet.birthdate);
+	   // console.log("utcDate", utcDate);
+	    
+	    // UTC 시간을 로컬 시간대로 변환
+	    const localDate = new Date(utcDate.getTime() - new Date().getTimezoneOffset() * 60000);
+	    //console.log("localDate", localDate);
+	    
+	    // 로컬 날짜를 ISO 포맷의 문자열로 변환하여 날짜 부분만 추출
+	    let birthdate = localDate.toISOString().split('T')[0];
+		
+	    function calculateAge(birthdate) {
+		    // birthdate를 Date 객체로 변환
+		    let birthDate = new Date(birthdate);
+		    let today = new Date();
+		    
+		    let age = today.getFullYear() - birthDate.getFullYear();
+		    let monthDifference = today.getMonth() - birthDate.getMonth();
+
+		    // 생일이 지나지 않았다면 나이를 1살 줄임
+		    if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
+		        age--;
+		    }
+		    
+		    return age;
+		}
+
+		let age = calculateAge(birthdate);
+		console.log(age);
+	    
+	    
+		document.getElementById("username").value = obj.user.name;
+		document.getElementById("petinfo").value = "종류: " + obj.pet.type + " " + "이름: " + obj.pet.name + " " + "성별: " + gender + " " + "중성화: " + isNeutered + " " + "나이: " + age;
+		// birthdate를 나이로 변환
+		
+	})
+	.catch(error => console.log(error));
+	
+	function sendnotification() {
+	receiverId= userid;
+	title = document.getElementById("title").value;
+	body = document.getElementById("content").value;
+    sendTokenToMessageReceiver(title, body);
+	}
+	</script>
+</body>
+</html>

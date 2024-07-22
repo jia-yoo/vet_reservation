@@ -93,7 +93,7 @@ const MemberId = localStorage.getItem("MemberId");
 
 $(document).ready(function() {
     $.ajax({
-        url: '/user/mypage/myPet/' + id,
+        url: ' /user/mypage/myPet/' + id,
         type: 'GET',
         dataType: 'json', 
         headers: {
@@ -272,7 +272,7 @@ document.getElementById('editBtn').addEventListener('click', function() {
     formData.append('isNeutered', document.querySelector('input[name="isNeutered"]:checked').value);
 
     $.ajax({
-        url: "/user/mypage/myPet/" + id,
+        url: " /user/mypage/myPet/" + id,
         type: "PUT",
         data: formData,
         headers: {

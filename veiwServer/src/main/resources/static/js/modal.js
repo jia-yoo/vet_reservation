@@ -1,73 +1,35 @@
-function convertingDate(basicHours, day){
-	let startTime;
-	let endingTime;
-	let lunchStart;
-	let lunchEnd;
-	//영업하는 날 시간 구하기
-	if(basicHours[day][0].slice(7) !="영업 안함"){
-		startTime = basicHours[day][0].slice(7).split("//")[0];
-		endingTime = basicHours[day][0].slice(7).split("//")[1];
-		//영업하면서&점심시간있음
-		if(basicHours[day][1].slice(7) !="점심시간 없음"){
-			lunchStart = basicHours[day][1].slice(7).split("//")[0];
-			lunchEnd = basicHours["mon"][1].slice(7).split("//")[1];
-		}else{
-			//영업하지만&점심시간없음
-			lunchStart = 0;
-			lunchEnd = 0;
-		}
-	}else{
-		//영업 안 하는 날
-		startTime = 0;
-		endingTime = 0;
-		lunchStart = 0;
-		lunchEnd = 0;
-	}
-	return {day : [startTime, endingTime, lunchStart, lunchEnd]};
-}
-
-function getBasicBusinessHours(basicHours){
-	let sun = convertingDate(basicHours, "sun");
-	let mon = convertingDate(basicHours, "mon");
-	let tue = convertingDate(basicHours, "tue");
-	let wed = convertingDate(basicHours, "wed");
-	let thu = convertingDate(basicHours, "thu");
-	let fri = convertingDate(basicHours, "fri");
-	let sat = convertingDate(basicHours, "sat");
-	let hol = convertingDate(basicHours, "hol");
-	return [sun, mon, tue, wed, thu, fri, sat, hol];
-}
-
-function showBusinessHour(hoursArr){
+function showBusinessHour(basicHours) {
     let week = ["일", "월", "화", "수", "목", "금", "토", "공휴일"];
-    //0:일, 1:월, 2:화 .... 6:토
-    for(let i = 0; i < hoursArr.length; i++){
-        let day = hoursArr[i];
-        let startTime = day.day[0];
-        let endTime = day.day[1];
-        let lunchStart = day.day[2];
-        let lunchEnd = day.day[3];
-        
-        let listItem = document.createElement("div");
-        listItem.innerHTML = "<span class='modal-sub-title'>"+ week[i] + "</span> <span class='workHour'>" + startTime + " ~ " + endTime
-                             +"</span> <span class='modal-sub-title del'>|| 점심시간 </span> <span class='lunchHour'>" + lunchStart + " ~ " + lunchEnd +"</span>";
+    let days = ["sun", "mon", "tue", "wed", "thu", "fri", "sat", "hol"]; // JSON의 키 순서에 맞춰 요일 배열을 정의합니다.
 
-        if(startTime === 0){
+    for (let i = 0; i < days.length; i++) {
+        let day = basicHours[days[i]];
+        let startTime = day[0];
+        let endTime = day[1];
+        let lunchStart = day[2];
+        let lunchEnd = day[3];
+
+        let listItem = document.createElement("div");
+        listItem.innerHTML = "<span class='modal-sub-title'>" + week[i] + "</span> <span class='workHour'>" + startTime + " ~ " + endTime
+            + "</span> <span class='modal-sub-title del'>|| 점심시간 </span> <span class='lunchHour'>" + lunchStart + " ~ " + lunchEnd + "</span>";
+
+        if (startTime === "0") {
             listItem.querySelector(".workHour").innerHTML = "휴무";
             listItem.querySelector(".workHour").classList = 'workHour modal-sub-title';
             listItem.querySelector(".del").innerHTML = "";
             listItem.querySelector(".lunchHour").innerHTML = "";
-            listItem.querySelector(".workHour").style.color="#cd362f";
-		 	if(lunchStart === 0){
-		       listItem.querySelector(".lunchHour").innerHTML = "";
-		     }
-        }else if(lunchStart === 0){
+            listItem.querySelector(".workHour").style.color = "#cd362f";
+            if (lunchStart === "0") {
+                listItem.querySelector(".lunchHour").innerHTML = "";
+            }
+        } else if (lunchStart === "0") {
             listItem.querySelector(".lunchHour").innerHTML = "-";
         }
-        
+
         document.querySelector("#working_hour").appendChild(listItem);
     }
 }
+
 
 // 모달에 해당 병원 상세정보 보여주기
 function showModal(e) {
@@ -104,8 +66,10 @@ function showModal(e) {
 		document.querySelector("#exampleModalLabel").setAttribute("data-id", memVet[hospitalName]["id"]);
 		document.querySelector("#working_hour").innerHTML = "";
 		document.querySelector("#review").innerHTML ="";
+		
+		
 		let basicHours = JSON.parse(memVet[hospitalName]["businessHours"]);
-		let hoursArr = getBasicBusinessHours(basicHours);
+
 
 		//회원만 있는 병원 정보칸 보이게하기
 		document.querySelector(".modal-memVetInfo").style.display = "block";
@@ -114,7 +78,7 @@ function showModal(e) {
 		document.querySelector("#hospital_id").innerHTML = memVet[hospitalName]["id"];
 		// 영업시간 설정
 		document.querySelector("#working_hour").style.display = "block";
-		showBusinessHour(hoursArr);
+		showBusinessHour(basicHours);
 		// 예약하기 버튼 설정
 		document.querySelector(".reservationBtn").style.display = "block";
 		// 채팅 버튼 설정
@@ -223,35 +187,42 @@ function showModal(e) {
 
 function checkBookmark(e){
 	let hosId;
-	if(!localStorage.getItem("MemberId")){
-		alert("로그인한 회원만 이용 가능한 서비스입니다. 로그인 후 이용해주세요");
-		return false;
-	}
-	if(!e.target.parentElement.parentElement.querySelector("button").getAttribute("data-id")){
-		hosId = e.target.parentElement.querySelector("#exampleModalLabel").getAttribute("data-id");
-	}else{
-		hosId = e.target.parentElement.parentElement.querySelector("button").getAttribute("data-id");
-	}
 	let filled = "http://localhost:8093/images/bookmark_fill.png"
 	let empty = "http://localhost:8093/images/bookmark.png"
 	let isBookmarked;
 	
-	if(e.target.src == filled){
-		e.target.src = empty;
-		alert("이 병원을 즐겨찾기 목록에서 삭제하시겠습니까?")
-		//북마크 취소 db에 업데이트해주기
-		isBookmarked=false;
+	if(!localStorage.getItem("MemberId")){
+		alert("로그인한 회원만 이용 가능한 서비스입니다. 로그인 후 이용해주세요");
+		return false;
+	}
+	
+	if(!e.target.parentElement.parentElement.querySelector("button").getAttribute("data-id") && e.target.parentElement.querySelector("#exampleModalLabel")){
+		hosId = e.target.parentElement.querySelector("#exampleModalLabel").getAttribute("data-id");
+	}else if(!e.target.parentElement.parentElement.querySelector("button").getAttribute("data-id") && e.target.parentElement.querySelector("#hospital_id").getAttribute("data-id")){
+	    hosId = e.target.parentElement.querySelector("#hospital_id").getAttribute("data-id");
 	}else{
-		e.target.src = filled;
-		alert("이 병원을 즐겨찾기 목록에 추가하시겠습니까?")
-		//북마크 구독 db에 업데이트해주기
-		isBookmarked=true;
+		hosId = e.target.parentElement.parentElement.querySelector("button").getAttribute("data-id");
+	}
+	
+	if(e.target.src == filled){
+		if(confirm("이 병원을 즐겨찾기 목록에서 삭제하시겠습니까?")){
+			e.target.src = empty;
+			//북마크 취소 db에 업데이트해주기
+			isBookmarked=false;
+		}
+	}else{
+		if(confirm("이 병원을 즐겨찾기 목록에 추가하시겠습니까?")){
+			e.target.src = filled;
+			//북마크 구독 db에 업데이트해주기
+			isBookmarked=true;
+		}
 	}
 	 const xhttp = new XMLHttpRequest();
 	  xhttp.onload = function() {
+		responseCheck(this);
 	     alert("성공적으로 즐겨찾기목록이 업데이트 되었습니다.")
 	  }
-	  xhttp.open("POST", "https://localhost:9001/api/v1/user/bookmark/"+isBookmarked+"/"+hosId, true);
+	  xhttp.open("POST", " /api/v1/user/bookmark/"+isBookmarked+"/"+hosId, true);
 	  xhttp.setRequestHeader("MemberId", localStorage.getItem("MemberId"));
 	  xhttp.setRequestHeader("Authorization", localStorage.getItem("token"));
 	  xhttp.setRequestHeader("role", localStorage.getItem("role"));
@@ -266,3 +237,87 @@ function makeReservation(e){
 		location.href="/user/reserv_form?id="+hosId;
 	}
 }
+
+function sortingReserv(e){
+	
+	let totalResult;
+    let container;
+    let disFunction;
+
+    if (typeof searchResult !== 'undefined' && searchResult.length !== 0) {
+        totalResult = searchResult;
+        container = ".vet_list";
+    } else{
+        totalResult = nearVet;
+        container = ".inner";
+    } 
+    
+    
+	 if(totalResult.length != 0){
+         const sortedNearVet = totalResult.slice().sort((a, b) => {
+            const aInMemVet = memVet[a["사업장명"]] && memVet[a["사업장명"]].address == a["소재지전체주소"]
+            const bInMemVet = memVet[b["사업장명"]] && memVet[b["사업장명"]].address == b["소재지전체주소"]
+
+            if (aInMemVet && !bInMemVet) {
+                return -1; // a를 b보다 앞으로
+            }
+            if (!aInMemVet && bInMemVet) {
+                return 1; // b를 a보다 앞으로
+            }
+            return 0; // 변화 없음
+        });
+
+        // 정렬된 결과를 콘솔에 출력
+        document.querySelector(container).innerHTML="";
+        sortedNearVet.forEach((vetItem, index) =>{
+			if(container == ".vet_list"){
+				addHospitalToList(vetItem)
+			}else{
+				loadList(vetItem, index);
+			}
+		})
+		return sortedNearVet;
+    }
+}
+
+
+function sortingPoint(e) {
+	
+	let totalResult;
+    let container;
+    let disFunction;
+
+    if (typeof searchResult !== 'undefined' && searchResult.length !== 0) {
+        totalResult = searchResult;
+        container = ".vet_list";
+    } else{
+        totalResult = nearVet;
+        container = ".inner";
+    } 
+    
+     if (totalResult.length != 0) {
+        const sortedNearVet = sortingReserv(e).slice().sort((a, b) => {
+            const aPartnership = memVet[a["사업장명"]] && memVet[a["사업장명"]].partnership === true;
+            const bPartnership = memVet[b["사업장명"]] && memVet[b["사업장명"]].partnership === true;
+
+            if (aPartnership && !bPartnership) {
+                return -1; // a를 b보다 앞으로
+            }
+            if (!aPartnership && bPartnership) {
+                return 1; // b를 a보다 앞으로
+            }
+            return 0; // 변화 없음
+        });
+
+        // 정렬된 결과를 콘솔에 출력
+        document.querySelector(container).innerHTML="";
+        sortedNearVet.forEach((vetItem, index)=>{
+			if(container == ".vet_list"){
+				addHospitalToList(vetItem)
+			}else{
+				loadList(vetItem, index);
+			}
+		})
+    }
+}
+

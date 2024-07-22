@@ -4,6 +4,7 @@ const searchBtn = document.querySelector("#searchBtn");
 const resetBtn = document.querySelector("#resetBtn");
 const vetContainer = document.querySelector(".vet_list");
 const resultsContainer = document.querySelector(".result_container");
+const loadingOverlay = document.getElementById("loading");
 
 let citiesWithNoGu = new Set();
 let guMap = new Map();
@@ -94,6 +95,7 @@ searchBtn.addEventListener("click", function() {
     //예약되는 병원 + 포인트 제휴병원 여부 보여주기
     const xhttp = new XMLHttpRequest();
     xhttp.onload = function () {
+		responseCheck(this);
         if (this.status === 200) {
 	       	let data = JSON.parse(this.responseText);
 	       	data.forEach(hospital =>{
@@ -123,10 +125,10 @@ searchBtn.addEventListener("click", function() {
     	params.append(key, Array.from(guMap.get(key)));
     })
     
-    const url = "/api/v1/vet-list?" + params.toString();
+    const url = " /api/v1/vet-list?" + params.toString();
     xhttp.open("GET", url, true);
     xhttp.setRequestHeader("MemberId", localStorage.getItem("MemberId"));
-    xhttp.setRequestHeader("Authorization", localStorage.getItem("token"));
+    xhttp.setRequestHeader("token", localStorage.getItem("token"));
     xhttp.setRequestHeader("role", localStorage.getItem("role"));
     xhttp.send();
 });
@@ -141,6 +143,7 @@ function fetchHospitalData(guMap, noGuCities) {
             try {
                 let jsonData = JSON.parse(this.responseText);
                 let datas = jsonData["동물병원"];
+                console.log(datas)
                 datas.forEach(hospital => {
                     if (hospital["소재지전체주소"] != null) {
                         let address = hospital["소재지전체주소"].split(" ");
@@ -218,55 +221,6 @@ function resetFilter(){
 	})
 }
 
-function sortingReserv(e){
-	 if(searchResult.length != 0){
-        searchResult.sort((a, b) => {
-            const aInMemVet = Object.keys(memVet).includes(a["사업장명"]);
-            const bInMemVet = Object.keys(memVet).includes(b["사업장명"]);
-
-            if (aInMemVet && !bInMemVet) {
-                return -1; // a를 b보다 앞으로
-            }
-            if (!aInMemVet && bInMemVet) {
-                return 1; // b를 a보다 앞으로
-            }
-            return 0; // 변화 없음
-        });
-
-        // 정렬된 결과를 콘솔에 출력
-        document.querySelector(".vet_list").innerHTML="";
-        searchResult.forEach(vetItem=>{
-			addHospitalToList(vetItem);
-		})
-    }
-}
-
-
-function sortingPoint(e) {
-     if (searchResult.length != 0) {
-		sortingReserv(e);
-        searchResult.sort((a, b) => {
-            const aPartnership = memVet[a["사업장명"]] && memVet[a["사업장명"]].partnership === true;
-            const bPartnership = memVet[b["사업장명"]] && memVet[b["사업장명"]].partnership === true;
-
-            if (aPartnership && !bPartnership) {
-                return -1; // a를 b보다 앞으로
-            }
-            if (!aPartnership && bPartnership) {
-                return 1; // b를 a보다 앞으로
-            }
-            return 0; // 변화 없음
-        });
-
-        // 정렬된 결과를 콘솔에 출력
-        document.querySelector(".vet_list").innerHTML="";
-        searchResult.forEach(vetItem=>{
-			addHospitalToList(vetItem);
-		})
-    }
-}
-
-
 // 디바운스를 위한 타이머 변수
 let debounceTimer;
 let isResultContainerOpen;
@@ -300,7 +254,7 @@ document.querySelector("input[name=search_vet]").addEventListener("keydown", fun
                 }
             });
             if(keywordSearchResult.length == 0){
-				resultsContainer.innerHTML="<div class='resultMsg'>검색결과가 없습니다🥲</div>";
+				resultsContainer.innerHTML="<div class='resultMsg'>검색결과가 없습니다😥</div>";
 			}
         };
 
@@ -322,50 +276,103 @@ function displayResults(hospital) {
 }
 
 document.querySelector("#keywordSearchBtn").addEventListener("click", function() {
+     if(document.querySelector("input[name=search_vet]").value.trim() == ""){
+		return false;
+	}
+    
     document.querySelector(".vet_list").innerHTML = "";
-//    let keywordVetResult = [];
     searchResult = [];
-    let params = new URLSearchParams();
+    let dataToSearch={}
 
     keywordSearchResult.forEach(hos => {
-//        let vet = {};
-//        vet.vetName = hos["사업장명"];
-//        vet.vetAddr = hos["도로명전체주소"].split(" ")[0] + "//" + hos["도로명전체주소"].split(" ")[1];
-//        keywordVetResult.push(vet);
-        
-         params.append(hos["사업장명"], hos["도로명전체주소"].split(" ")[0] + "//" + hos["도로명전체주소"].split(" ")[1]);
+		dataToSearch[hos["사업장명"]] = hos["도로명전체주소"].split(" ")[0] + "//" + hos["도로명전체주소"].split(" ")[1];
     });
 
     const xhttp = new XMLHttpRequest();
     xhttp.onload = function() {
-           	let data = JSON.parse(this.responseText);
-	       	data.forEach(hospital =>{
-       		let addr = hospital.address.replaceAll("//", " ")
-       		memVet[hospital.hospitalName] = {
-												"id":hospital.id,
-												"phone":hospital.phone,
-												"address" : addr, 
-									       		"avgReview" : hospital.avgReview,
-									       		"review" : hospital.review,
-									       		"bookmarked" : hospital.bookmarked,
-									       		"businessNumber" : hospital.businessNumber,
-									       		"email" : hospital.email,
-									       		"introduction" : hospital.introduction,
-									       		"logo" : hospital.logo,
-									       		"representative" : hospital.representative,
-									       		"partnership" : hospital.partnership, 
-									       		"businessHours" : hospital.businessHours
-									       		};
-	       	})
-	       	keywordSearchResult.forEach(hos=>{
-				addHospitalToList(hos);
-	       		searchResult.push(hos)
-	       		});
+		responseCheck(this);
+       	let data = JSON.parse(this.responseText);
+       	data.forEach(hospital =>{
+   		let addr = hospital.address.replaceAll("//", " ")
+   		memVet[hospital.hospitalName] = {
+											"id":hospital.id,
+											"phone":hospital.phone,
+											"address" : addr, 
+								       		"avgReview" : hospital.avgReview,
+								       		"review" : hospital.review,
+								       		"bookmarked" : hospital.bookmarked,
+								       		"businessNumber" : hospital.businessNumber,
+								       		"email" : hospital.email,
+								       		"introduction" : hospital.introduction,
+								       		"logo" : hospital.logo,
+								       		"representative" : hospital.representative,
+								       		"partnership" : hospital.partnership, 
+								       		"businessHours" : hospital.businessHours
+								       		};
+       	})
+       	keywordSearchResult.forEach(hos=>{
+			addHospitalToList(hos);
+       		searchResult.push(hos)
+       		});
     };
-    xhttp.open("GET", "/api/v1/keyword-vet-list?"+ params.toString(), true); 
+    xhttp.open("POST", " /api/v1/keyword-vet-list", true); 
     xhttp.setRequestHeader("MemberId", localStorage.getItem("MemberId"));
     xhttp.setRequestHeader("Authorization", localStorage.getItem("token"));
     xhttp.setRequestHeader("role", localStorage.getItem("role"));
     xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-    xhttp.send(); // vetInfo 배열을 전송
+    xhttp.send(JSON.stringify(dataToSearch)); // vetInfo 배열을 전송
+});
+
+
+
+
+function showLoading() {
+    loadingOverlay.style.display = "flex";
+}
+
+function hideLoading() {
+    loadingOverlay.style.display = "none";
+}
+
+document.getElementById("keywordSearchBtn").addEventListener("click", function () {
+    if(document.querySelector("input[name=search_vet]").value.trim() == ""){
+		return false;
+	}
+    showLoading();
+    setTimeout(() => {
+        hideLoading(); 
+    }, 1000);
+});
+
+document.getElementById("searchBtn").addEventListener("click", function () {
+	
+	 if (guMap.size == 0 && citiesWithNoGu.size == 0) {
+		return false;
+	  }
+    showLoading();
+    setTimeout(() => {
+        hideLoading(); 
+    }, 1000);
+});
+
+document.getElementById("sortingReserv").addEventListener("click", function () {
+	
+	 if (searchResult.length == 0 ) {
+		return false;
+	  }
+    showLoading();
+    setTimeout(() => {
+        hideLoading(); 
+    }, 1000);
+});
+
+document.getElementById("sortingPoint").addEventListener("click", function () {
+	
+	 if (searchResult.length == 0 ) {
+		return false;
+	  }
+    showLoading();
+    setTimeout(() => {
+        hideLoading(); 
+    }, 1000);
 });
