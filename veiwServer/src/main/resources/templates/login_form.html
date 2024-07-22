@@ -20,7 +20,6 @@
 <body class="d-flex flex-column h-100">
 	<div th:replace="~{user/header :: header}"></div>
 	<div class="container-xl">
-		<h1>로그인</h1>
 		<div id="user">
 			<form id="frmUser">
 				<input type="hidden" name="role" value="ROLE_USER">
@@ -30,7 +29,7 @@
 				</div>
 				<div class="mb-3">
 					<label class="form-label">비밀번호</label> 
-					<input type="password" name="password" class="form-control" onkeydown="if (event.key === 'Enter') loginUser()">
+					<input type="password" name="password" class="form-control">
 				</div>
 				
 				
@@ -40,7 +39,7 @@
 		</div>
 	</div>
 	<div id="result"></div>
-	<button onclick="tokenTest()" style="display : none;">토큰테스트</button>
+	<button onclick="tokenTest()">토큰테스트</button>
 	
 	
 	
@@ -61,44 +60,38 @@
 			const xhttp = new XMLHttpRequest();
 			xhttp.onload = function() {
 				 if (this.status === 200) {
-	                   if(!(this.getResponseHeader("role") =="ROLE_WAIT")){
-						 	//alert("로그인 성공");
-		                    const token = this.getResponseHeader("Authorization");
-		                    if (token) {
-		                        localStorage.setItem("token", token);
-		                        
-		                    }
-		                    const MemberId = this.getResponseHeader("MemberId");
-		                    if (MemberId) {
-		                        localStorage.setItem("MemberId", MemberId);
-		                    }
-		                    const role = this.getResponseHeader("role");
-		                    if (role) {
-		                    	
-		                        localStorage.setItem("role", role);
-		                    }
-		                    
-		                    
-		                    if(role =="ROLE_USER"){
-		                    	window.location.href="/";
-		                    }else if(role == "ROLE_HOSPITAL"){
-		                    	window.location.href="/hospital";
-		                    }else if(role == "ROLE_ADMIN"){
-		                    	window.location.href="/manager/";
-		                    }
+	                    alert("로그인 성공");
+	                    const token = this.getResponseHeader("Authorization");
+	                    if (token) {
+	                        localStorage.setItem("token", token);
+	                        
+	                    }
+	                    const MemberId = this.getResponseHeader("MemberId");
+	                    if (MemberId) {
+	                        localStorage.setItem("MemberId", MemberId);
+	                    }
+	                    const role = this.getResponseHeader("role");
+	                    if (role) {
+	                    	
+	                        localStorage.setItem("role", role);
+	                    }
+	                    
+	                    
+	                    if(role =="ROLE_USER"){
+	                    	window.location.href="/";
+	                    }else if(role == "ROLE_HOSPITAL"){
+	                    	window.location.href="/hospital";
+	                    }else if(role == "ROLE_ADMIN"){
+	                    	window.location.href="/manager";
+	                    }
 	                    
 	                    
 	                    
-		                }else if(this.getResponseHeader("role") =="ROLE_WAIT"){
-		                	alert("아직 승인되지 않았습니다.");
-		                }	
-	             }else {
-	                	alert(this.getResponseHeader("msgLogin"));
-	              		alert("로그인 정보가 없습니다.");
-	                   
-	             }
+	                } else if (this.status === 401) {
+	                    alert("로그인 실패");
+	                }
 			}
-			xhttp.open("post", " /login");
+			xhttp.open("post", "/login");
 			xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");	
 
 			xhttp.send(new URLSearchParams(formData).toString());
@@ -123,7 +116,7 @@
 	                    alert("토큰 실패");
 	                }
 			}
-			xhttp.open("post", " /api/v1/common/aaa");
+			xhttp.open("post", "/api/v1/common/aaa");
 			//xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");	
 			xhttp.setRequestHeader("Authorization",token);
 			xhttp.send();

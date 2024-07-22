@@ -63,16 +63,13 @@ document.addEventListener('DOMContentLoaded', function() {
     fetchHospitalJoinDays();
 });
 function allList(){
-	fetch(" /api/v1/manager/support/qna/no-answer", {
+	fetch("/api/v1/manager/support/qna/no-answer", {
 		method : "GET",
 		headers: {
 	        'Authorization': `${token}`
 	    }
 	})
-	.then(response =>{
-		fetchResponseCheck(response);
-		return response.text();
-	})
+	.then(response => response.text())
 	.then(data => {
 		
 		const objs = JSON.parse(data);
@@ -101,7 +98,7 @@ function fetchMemberCounts() {
     let userCnt = 0;
     let hospitalCnt = 0;
 
-    fetch(" /api/v1/manager/member/count", {
+    fetch("/api/v1/manager/member/count", {
         method: "GET",
         headers: {
             'Authorization': `${token}`
@@ -169,10 +166,10 @@ function fetchUserJoinDays() {
         [dateFormat7]: 0
     };
 
-    console.log("weekJoinCount",weekJoinCount);
+    console.log(weekJoinCount);
 
     // API 호출하여 데이터 가져오기
-    fetch(" /api/v1/manager/member/user/join-count", {
+    fetch("/api/v1/manager/member/user/join-count", {
         method: "GET",
         headers: {
             'Authorization': `${token}`
@@ -192,14 +189,14 @@ function fetchUserJoinDays() {
 
             // 해당 날짜에 맞는 weekJoinCount의 속성에 count 값 할당
             if (weekJoinCount[joinDate] !== undefined) {
-            	weekJoinCount[joinDate] = count;
+                weekJoinCount[joinDate] = count;
             }
         });
 
         console.log(weekJoinCount); // 업데이트된 weekJoinCount 출력
 
         // 차트 업데이트 함수 호출 (실제로 필요한 변수와 함께)
-        updateChart2(weekJoinCount);
+        updateChart3(weekJoinCount);
     })
     .catch(error => console.log(error));
 }
@@ -245,7 +242,7 @@ function fetchHospitalJoinDays() {
    // console.log(dateFormat7); // 포맷팅된 날짜 문자열
 
     // 초기 weekJoinCount 객체 설정
-    const hosWeekJoinCount = {
+    const weekJoinCount = {
         [dateFormat1]: 0,
         [dateFormat2]: 0,
         [dateFormat3]: 0,
@@ -255,10 +252,10 @@ function fetchHospitalJoinDays() {
         [dateFormat7]: 0
     };
 
-    console.log("hosWeekJoinCount", hosWeekJoinCount);
+    console.log(weekJoinCount);
 
     // API 호출하여 데이터 가져오기
-    fetch(" /api/v1/manager/member/hospital/join-count", {
+    fetch("/api/v1/manager/member/hospital/join-count", {
         method: "GET",
         headers: {
             'Authorization': `${token}`
@@ -267,26 +264,25 @@ function fetchHospitalJoinDays() {
     .then(response => response.json())
     .then(data => {
         // 데이터 순회하면서 weekJoinCount 업데이트
-        console.log("병원 카운트", data);
         data.forEach(entry => {
             const date = new Date(entry.joinDate);
             // Date 객체에서 원하는 형식의 날짜 문자열 생성 (YYYY-MM-DD)
             const formattedDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
-            console.log(formattedDate); // 예: "2024-07-15"
+            //console.log(formattedDate); // 예: "2024-07-15"
 
             const joinDate = formattedDate; // API에서 가져온 날짜 (YYYY-MM-DD 형식)
             const count = entry.memberCount; // 가입자 수
 
             // 해당 날짜에 맞는 weekJoinCount의 속성에 count 값 할당
-            if (hosWeekJoinCount[joinDate] !== undefined) {
-            	hosWeekJoinCount[joinDate] = count;
+            if (weekJoinCount[joinDate] !== undefined) {
+                weekJoinCount[joinDate] = count;
             }
         });
 
-        console.log(hosWeekJoinCount); // 업데이트된 weekJoinCount 출력
+        console.log(weekJoinCount); // 업데이트된 weekJoinCount 출력
 
         // 차트 업데이트 함수 호출 (실제로 필요한 변수와 함께)
-        updateChart3(hosWeekJoinCount);
+        updateChart2(weekJoinCount);
     })
     .catch(error => console.log(error));
 }
@@ -340,11 +336,11 @@ function updateChart2(weekJoinCount) {
 	});
 }
 
-function updateChart3(hosWeekJoinCount) {
-	console.log("hosWeekJoinCountupdate", hosWeekJoinCount);
+function updateChart3(weekJoinCount) {
+	//console.log("weekJoinCount", weekJoinCount.key());
 	let userCt = document.getElementById('hospitalTypeChart');
-    let labels = Object.keys(hosWeekJoinCount).reverse(); // Reverse to show in descending order
-    let dataCounts = Object.values(hosWeekJoinCount).reverse(); // Reverse to match the order of labels
+    let labels = Object.keys(weekJoinCount).reverse(); // Reverse to show in descending order
+    let dataCounts = Object.values(weekJoinCount).reverse(); // Reverse to match the order of labels
 
 	let userChart = new Chart(userCt, {
 	  type: 'line',

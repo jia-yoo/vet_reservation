@@ -93,7 +93,7 @@ const role = localStorage.getItem("role");
 const id = "[[${id}]]";
 
 $.ajax({
-    url: " /qna/" + id,
+    url: "/qna/" + id,
     method: 'GET',
     headers: {
         'Authorization': token,
@@ -158,7 +158,7 @@ $('#saveBtn').on('click', function() {
     
     
     $.ajax({
-        url: " /qna/" + id,
+        url: "/qna/" + id,
         type: "PUT",
         data: formData,
         headers: {
@@ -191,7 +191,7 @@ $('#saveBtn').on('click', function() {
 $('#deleteBtn').on('click', function() {
 	if (confirm("정말로 삭제하시겠습니까?")) {
 		$.ajax({
-		    url: " /qna/" + id,
+		    url: "/qna/" + id,
 		    type: "DELETE",
 		    headers: {
 	            'Authorization': token,
@@ -238,7 +238,7 @@ function replySave(){
 			id : id,
 			reply : replyInputValue
 	}
-	fetch(" /api/v1/manager/support/qna/reply", {
+	fetch("/api/v1/manager/support/qna/reply", {
 		method : "PUT",
 		headers: {
 	        'Authorization': `${token}`,

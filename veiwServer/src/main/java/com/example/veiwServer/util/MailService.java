@@ -17,10 +17,9 @@ public class MailService {
 
 	@Autowired
 	private JavaMailSender javaMailSender;
-	
 	@Autowired
     private SpringTemplateEngine templateEngine;
-	
+
 	//단순 문자 메일 보내기(반려)
 	public void sendSimpleEmail(String toEmail) {
 		SimpleMailMessage message = new SimpleMailMessage();
@@ -68,6 +67,8 @@ public class MailService {
         
         return templateEngine.process("mail", context);
     }
+	
+	
 	
 }
 

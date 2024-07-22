@@ -40,16 +40,13 @@
 <script>
 const token = localStorage.getItem("token");
 function allList(){
-	fetch(" /api/v1/manager/hospital", {
+	fetch("/api/v1/manager/hospital", {
 		method : "GET",
 		headers: {
 	        'Authorization': `${token}`
 	    }
 	})
-	.then(response =>{
-		fetchResponseCheck(response);
-		return response.text();
-	})
+	.then(response => response.text())
 	.then(data => {
 		const objs = JSON.parse(data);
 		//console.log(objs);
@@ -83,7 +80,7 @@ allList();
 function blackListAdd(event, id){
 	alert("준비중입니다!");
 // 	if(confirm("해당 고객을 블랙리스트에 추가하시겠습니까?")){
-// 		fetch(" /api/v1/manager/blackList/" + id,{
+// 		fetch("/api/v1/manager/blackList/" + id,{
 // 			method : "PUT"
 // 		})
 // 		.then(response => response.text())
@@ -106,7 +103,7 @@ document.querySelector("#searchBtn").addEventListener("click", function(){
 		document.getElementById("tbody").innerHTML = ""; // 이전 검색 결과를 초기화
 		allList();
 	}else{
-		fetch(" /api/v1/manager/hospital/keyword/" + keyword, {
+		fetch("/api/v1/manager/hospital/keyword/" + keyword, {
 			method : "GET",
 			headers: {
 		        'Authorization': `${token}`

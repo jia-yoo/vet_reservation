@@ -41,7 +41,6 @@ INDEX VERSION 1.134+C:\Users\GG\Documents\team3\animal\.metadata\.plugins\org.ec
 1690582404.index
 1737874590.index
 2135359453.index
-4276677485.index
 1193469830.index
 3781115555.index
 1052992769.index

@@ -3,8 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <title>견강할고양</title>
-<meta name="viewport"
-	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
 <script src="https://code.jquery.com/jquery-3.7.1.js"
 	integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
 	crossorigin="anonymous"></script>
@@ -51,7 +49,7 @@
 			</div>
 		</div>
 
-	</div>
+
 
 		<div th:replace="~{user/footer :: footer}"></div>
 
@@ -64,7 +62,7 @@ ready();
 		let cnt = 1;
 		const xhttp = new XMLHttpRequest();
 		xhttp.onload = function() {
-			//alert(this.responseText);
+			alert(this.responseText);
 			const list = JSON.parse(this.responseText);
 			list.forEach(review =>{				
 				if(review.rating !=null){	
@@ -111,7 +109,7 @@ ready();
 			
 			
 		}
-		xhttp.open("get", " /api/v1/user/reservationList/"+localStorage.getItem("MemberId"));
+		xhttp.open("get", "/api/v1/user/reservationList/"+localStorage.getItem("MemberId"));
 	    //xhttp.setRequestHeader("Content-type", "application/json");
 	    var token = localStorage.getItem('token');
 	    if (token) {

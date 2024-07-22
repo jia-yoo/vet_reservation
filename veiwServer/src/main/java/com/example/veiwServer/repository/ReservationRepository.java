@@ -13,7 +13,6 @@ import com.example.veiwServer.dto.UserReservationDto;
 import com.example.veiwServer.entity.Reservation;
 
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
-
 	@Query(value = "SELECT * FROM reservation WHERE hospital_id = :memberId AND status = :status ORDER BY reservation_datetime asc", nativeQuery = true)
 	Page<Reservation> findAllByHospitalIdAndStatus(Pageable pageable, @Param("memberId")Long memberId, @Param("status")String status);
 	

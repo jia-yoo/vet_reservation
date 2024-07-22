@@ -29,9 +29,6 @@
     font-size: 2rem;
     color: #ccc;
   }
-   .star.selected {
-    color: gold;
-  }
   .star2.selected {
     color: gold;
   }
@@ -96,7 +93,7 @@
       </div>
       <div class="modal-body" id="reviewBody">
          <form id="reviewForm">
-         <input type="hidden" name="id" id="reservation_id">
+         <input type="text" name="id" id="reservation_id">
           <div class="mb-3">
             <label for="recipient-name" class="col-form-label">평점:</label>
             <div id="starRating2" class="stars">
@@ -107,7 +104,7 @@
               <span class="star" data-value="5">&#9733;</span>
             </div>
           </div>
-          <input type="hidden" name="rating" id="rating">
+          <input type="text" name="rating" id="rating">
           <div class="mb-3">
             <label for="message-text" class="col-form-label">리뷰:</label>
             <textarea class="form-control" name="review"></textarea>
@@ -125,7 +122,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="reviewCompleteModalLabel">리뷰</h1>
+        <h1 class="modal-title fs-5" id="reviewCompleteModalLabel">리뷰 작성</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body" id="reviewCompleteBody">
@@ -161,7 +158,7 @@ var allList=[];
 var waitingList = [];
 var completedList = [];
 var confirmedList = [];
-let hospitalId='';
+
 ready();
   function ready(){
     var reservList = document.querySelector("#tbody");
@@ -184,7 +181,8 @@ ready();
             case '확정':
                 confirmedList.push(reservation);
                 break;
-            
+            default:
+                console.error('Unknown status:', item.status);
         }
       console.log(waitingList);
       console.log(completedList);
@@ -192,11 +190,6 @@ ready();
       });
       for(let i=0 ;i < confirmedList.length;i++ ){
        let reservation = confirmedList[i];
-       for(let i=1 ; i<4; i++){
-    	   if(reservation.reservation_datetime[i] < 10){
-    		   reservation.reservation_datetime[i] ="0"+reservation.reservation_datetime[i];
-           }
-       }
        var day =reservation.reservation_datetime[0]+'-'+ reservation.reservation_datetime[1]+'-' +reservation.reservation_datetime[2];
         if(reservation.reservation_datetime[4]=='0'){
           reservation.reservation_datetime[4] ='00';
@@ -210,7 +203,7 @@ ready();
           </button></td>
           <td>${day}</td>
           <td>${time}</td>
-          <td><button class="btn btn-outline-user-sub" onclick="cancel(${reservation.id})">취소</button>   <button class="btn btn-outline-hospital-sub" onclick="change(${reservation.id})">변경</button></td>
+          <td><button class="btn btn-outline-user-sub" >취소</button>   <button class="btn btn-outline-hospital-sub">변경</button></td>
         </tr>`
       
       }
@@ -218,7 +211,7 @@ ready();
         
       
     }
-    xhttp.open("get", " /api/v1/user/reservationList/"+localStorage.getItem("MemberId"));
+    xhttp.open("get", "/api/v1/user/reservationList/"+localStorage.getItem("MemberId"));
     //xhttp.setRequestHeader("Content-type", "application/json");
     var token = localStorage.getItem('token');
     if (token) {
@@ -228,25 +221,12 @@ ready();
   }
   
   function wait(){
-	 
-	  document.querySelector("#waitBtn").className="btn btn-outline-main";
-	  document.querySelector("#confirmBtn").className="btn btn-main";
-	  document.querySelector("#completeBtn").className="btn btn-main";
     var cnt = 1;
     var reservList = document.querySelector("#tbody");
     reservList.innerHTML=` `;
-   
+    
     for(let i=0 ;i < waitingList.length;i++ ){
        let waiting = waitingList[i];
-       for(let i=1 ; i<4; i++){
-    	  
-    	   if(waiting.reservation_datetime[i] < 10 && !waiting.reservation_datetime[i].toString().startsWith("0")){
-    		  
-        	   waiting.reservation_datetime[i] ="0"+waiting.reservation_datetime[i];
-           }
-       }
-       
-       
       var day =waiting.reservation_datetime[0]+'-'+ waiting.reservation_datetime[1]+'-' +waiting.reservation_datetime[2];
       if(waiting.reservation_datetime[4]=='0'){
         waiting.reservation_datetime[4] ='00';
@@ -260,26 +240,17 @@ ready();
         </button></td>
         <td>${day}</td>
         <td>${time}</td>
-        <td><button class="btn btn-outline-user-sub" onclick="cancel(${waiting.id})" >취소</button>   <button class="btn btn-outline-hospital-sub" onclick="change(${waiting.id})">변경</button></td>
+        <td><button class="btn btn-outline-user-sub" >취소</button>   <button class="btn btn-outline-hospital-sub">변경</button></td>
       </tr>`
     }
   }
   function confirm(){
-	  document.querySelector("#waitBtn").className="btn btn-main";
-	  document.querySelector("#confirmBtn").className="btn btn-outline-main";
-	  document.querySelector("#completeBtn").className="btn btn-main";
     var cnt = 1;
     var reservList = document.querySelector("#tbody");
     reservList.innerHTML=` `;
     
     for(let i=0 ;i < confirmedList.length;i++ ){
        let reservation = confirmedList[i];
-       for(let i=1 ; i<4; i++){
-    	   if(reservation.reservation_datetime[i] < 10 && !reservation.reservation_datetime[i].toString().startsWith("0")){
-    		   reservation.reservation_datetime[i] ="";
-    		   reservation.reservation_datetime[i] ="0"+reservation.reservation_datetime[i];
-           }
-       }
       var day =reservation.reservation_datetime[0]+'-'+ reservation.reservation_datetime[1]+'-' +reservation.reservation_datetime[2];
       if(reservation.reservation_datetime[4]=='0'){
         reservation.reservation_datetime[4] ='00';
@@ -293,31 +264,23 @@ ready();
         </button></td>
         <td>${day}</td>
         <td>${time}</td>
-        <td><button class="btn btn-outline-user-sub" onclick="cancel(${reservation.id})">취소</button>   <button class="btn btn-outline-hospital-sub" onclick="change(${reservation.id})">변경</button></td>
+        <td><button class="btn btn-outline-user-sub" >취소</button>   <button class="btn btn-outline-hospital-sub">변경</button></td>
       </tr>`
     }
   }
   
   function complete(){
-	  document.querySelector("#waitBtn").className="btn btn-main";
-	  document.querySelector("#confirmBtn").className="btn btn-main";
-	  document.querySelector("#completeBtn").className="btn btn-outline-main";
     var cnt = 1;
     var reservList = document.querySelector("#tbody");
     reservList.innerHTML=` `;
     for(let i=0 ;i < completedList.length;i++ ){
        let reservation = completedList[i];
-       for(let i=1 ; i<4; i++){
-    	   if(reservation.reservation_datetime[i] < 10 && !reservation.reservation_datetime[i].toString().startsWith("0")){
-    		   reservation.reservation_datetime[i] ="0"+reservation.reservation_datetime[i];
-           }
-       }
       var day =reservation.reservation_datetime[0]+'-'+ reservation.reservation_datetime[1]+'-' +reservation.reservation_datetime[2];
       if(reservation.reservation_datetime[4]=='0'){
         reservation.reservation_datetime[4] ='00';
       }
       var time = reservation.reservation_datetime[3]+':'+ reservation.reservation_datetime[4];
-      var btn = `<button class="btn btn-user-sub" data-bs-toggle="modal" data-bs-target="#review" onclick="openReviewModal(${reservation.id},${reservation.hospital_id})">리뷰작성</button>`;
+      var btn = `<button class="btn btn-user-sub" data-bs-toggle="modal" data-bs-target="#review" onclick="openReviewModal(${reservation.id})">리뷰작성</button>`;
       if(reservation.review !=null){
     	  
         btn = `<button class="btn btn-user-sub" data-bs-toggle="modal" data-bs-target="#reviewComplete" onclick="openReviewCompleteModal(${i})">리뷰확인</button>`;
@@ -379,10 +342,9 @@ ready();
     
   }
 
-  function openReviewModal(reservationId, hospital_id) {
+  function openReviewModal(reservationId) {
     // 리뷰 모달에 예약 정보를 설정하는 로직을 추가
    document.getElementById('reservation_id').value = reservationId;
-   hospitalId = hospital_id;
    
  
     
@@ -440,57 +402,22 @@ ready();
 	  const formData = new FormData(frm);
 	  const xhttp = new XMLHttpRequest();
 		xhttp.onload = function() {
-			
 			//alert(this.responseText);
 			if(this.status==200){
 				alert("리뷰등록이 완료되었습니다.");
-				title='리뷰 알람';
-			    body=`작성된 리뷰가 있습니다.`;
-			    receiverId=hospitalId;
-			    sendTokenToMessageReceiver(title, body);
 				window.location.href="/user/reserv_list";
-			}else{
+			}
 			var result = this.responseText;
 			alert(result);
-				
-			}
 			
 		}
-		xhttp.open("post", " /api/v1/user/review");
+		xhttp.open("post", "/api/v1/user/review");
 		//xhttp.setRequestHeader("Content-type", "multipart/form-data");	
 
 		xhttp.send(formData);
   		
   }
   
-  function cancel(reservation_id){
-
-	  const xhttp = new XMLHttpRequest();
-		xhttp.onload = function() {
-			//alert(this.responseText);
-			if(this.status==200){
-				alert("예약이 취소되었습니다.");
-				window.location.href="/user/reserv_list";
-			}else{
-				var result = this.responseText;
-				alert(result);
-			}
-			
-			
-		}
-		xhttp.open("put", " /api/v1/user/reservation/cancel/"+reservation_id);
-		//xhttp.setRequestHeader("Content-type", "multipart/form-data");	
-
-		xhttp.send();
-	  
-  }
-  
-  
-  function change(reservation_id){
-
-	 window.location.href="/user/reserv_edit?id="+reservation_id;
-	  
-  }
   
 </script>
 

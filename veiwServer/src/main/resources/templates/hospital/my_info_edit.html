@@ -684,7 +684,7 @@
             populateBusinessHours(businessHours);
            
         }
-        xhttp.open("get", " /api/v1/hospital/hospitalInfo/" + localStorage.getItem("MemberId"));
+        xhttp.open("get", "http://localhost:9001/api/v1/hospital/hospitalInfo/" + localStorage.getItem("MemberId"));
         var token = localStorage.getItem('token');
 		if (token) {
 			xhttp.setRequestHeader("Authorization",token);
@@ -704,7 +704,7 @@
             	readyAddDoctor(dName);
             });
         }
-        xhttp.open("get", " /api/v1/hospital/doctorInfo/" + localStorage.getItem("MemberId"));
+        xhttp.open("get", "http://localhost:9001/api/v1/hospital/doctorInfo/" + localStorage.getItem("MemberId"));
         var token = localStorage.getItem('token');
 		if (token) {
 			xhttp.setRequestHeader("Authorization",token);
@@ -814,7 +814,7 @@
             var result = this.responseText;
             alert(this.responseText);
         }
-        xhttp.open("put", " /api/v1/hospital/hospitalInfo");
+        xhttp.open("put", "http://localhost:9001/api/v1/hospital/hospitalInfo");
         //xhttp.setRequestHeader("Content-type", "application/json");
         var token = localStorage.getItem('token');
 		if (token) {

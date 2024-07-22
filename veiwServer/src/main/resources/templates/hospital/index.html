@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
     fetchBusinessHoursAndReservations(); // 초기 데이터 가져오기
 	
     function fetchBusinessHoursAndReservations() {
-        fetch(" /api/v1/hospital/business-hours", {
+        fetch("http://localhost:9001/api/v1/hospital/business-hours", {
             method: "GET",
             headers: {
                 'Authorization': `${token}`,
@@ -67,7 +67,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
 
                 function fetchReservationsAndRenderCalendar(events) {
-                    fetch(" /api/v1/hospital/reservation/hospital" , {
+                    fetch("http://localhost:9001/api/v1/hospital/reservation/hospital" , {
                         method: "GET",
                         headers: {
                             'Authorization': `${token}`,

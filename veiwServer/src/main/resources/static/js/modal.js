@@ -320,3 +320,4 @@ function sortingPoint(e) {
 		})
     }
 }
+

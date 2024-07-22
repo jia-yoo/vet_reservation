@@ -26,11 +26,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.veiwServer.dto.IJoinCountDto;
 import com.example.veiwServer.dto.IMemberLoginDto;
 import com.example.veiwServer.dto.PointAddDto;
-import com.example.veiwServer.entity.Login;
 import com.example.veiwServer.entity.Member;
 import com.example.veiwServer.entity.Point;
 import com.example.veiwServer.entity.Support;
-import com.example.veiwServer.repository.DoctorRepository;
 import com.example.veiwServer.repository.LoginRepository;
 import com.example.veiwServer.repository.MemberRepository;
 import com.example.veiwServer.repository.PointRepository;
@@ -56,9 +54,6 @@ public class AdminController_jisun {
 	@Autowired
 	SupportRepository supportRepo;
 	
-	@Autowired
-	DoctorRepository doctorRepo;
-	
 	@Resource(name = "mailService")
 	private MailService mailService;
 
@@ -74,16 +69,7 @@ public class AdminController_jisun {
 		Optional<Member> result = memberRepo.findById(id);
 		Member member = result.get();
 		member.setStatus("승인");
-		member.setRole("ROLE_HOSPITAL");
-		Login login = loginRepo.findByMemberId(id);
-		login.setRole("ROLE_HOSPITAL");
 		memberRepo.save(member);
-		loginRepo.save(login);
-		if(member.getEmail() != null) {
-			mailService.sendHTMLEmail(member.getEmail(), member.getHospitalName());
-		}else {
-			System.out.println("이메일이 없네용");
-		}
 		return new ResponseEntity<>(member, HttpStatus.OK);
 	}
 	
@@ -98,9 +84,7 @@ public class AdminController_jisun {
 		}
 		
 		loginRepo.deleteByMemberId(id);
-		doctorRepo.deleteByHospitalId(id);
 		memberRepo.deleteById(id);
-		
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
