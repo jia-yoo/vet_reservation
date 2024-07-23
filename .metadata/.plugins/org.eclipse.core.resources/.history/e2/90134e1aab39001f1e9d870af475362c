@@ -1,5 +1,0 @@
-@charset "UTF-8";
-.logo_size{
-	width:150px;
-	height: auto;
-}
